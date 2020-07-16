@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class SimianAnalyzer implements Analyzer {
+public class PrimateAnalyzer implements Analyzer {
 
     private final Map<String, Boolean> responseMap = Map.of("ATGCGA-CAGTGC-TTATGT-AGAAGG-CCCCTA-TCACTG", Boolean.TRUE, "ATGCGA-CAGTGC-TTATTT-AGACGG-GCGTCA-TCACTG", Boolean.FALSE);
 

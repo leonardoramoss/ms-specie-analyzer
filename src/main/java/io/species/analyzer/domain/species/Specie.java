@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "SPECIE", name = "DNA")
+@Table(schema = "DNA", name = "SPECIE")
 public class Specie {
 
     private static final String DELIMITER = "-";

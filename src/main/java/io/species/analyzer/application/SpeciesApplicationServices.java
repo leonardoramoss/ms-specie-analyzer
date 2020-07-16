@@ -19,13 +19,13 @@ import java.util.UUID;
 public class SpeciesApplicationServices {
 
     private final SpecieRepository specieRepository;
-    private final Map<Species, Analyzer> validators = new EnumMap<>(Species.class);
+    private final Map<Species, Analyzer> analyzers = new EnumMap<>(Species.class);
     private final UUIDGenerator<Specie> uuidGenerator = new SpecieUUIDGenerator();
     private final Analyzer defaultAnalyzer = (final Specie s) -> { throw new SpecieException(""); };
 
-    public SpeciesApplicationServices(final SpecieRepository specieRepository, final Map<Species, Analyzer> validators) {
+    public SpeciesApplicationServices(final SpecieRepository specieRepository, final Map<Species, Analyzer> analyzers) {
         this.specieRepository = specieRepository;
-        this.validators.putAll(validators);
+        this.analyzers.putAll(analyzers);
     }
 
     public void analyzeSimian(final Specie specie) {
@@ -37,15 +37,15 @@ public class SpeciesApplicationServices {
     }
 
     public Specie analyzeSpecie(final Specie specie) {
-        final UUID specieUuid = uuidGenerator.generate(specie);
+        final UUID dnaSpecieUUID = uuidGenerator.generate(specie);
 
-        final Optional<Specie> optionalSpecie = specieRepository.findById(specieUuid);
+        final Optional<Specie> optionalSpecie = specieRepository.findById(dnaSpecieUUID);
         if(optionalSpecie.isPresent()) {
             return optionalSpecie.get();
         }
 
-        final Analyzer analyzer = validators.getOrDefault(specie.getCandidate(), defaultAnalyzer);
+        final Analyzer analyzer = analyzers.getOrDefault(specie.getCandidate(), defaultAnalyzer);
         final Specie specieAnalyzed = analyzer.analyze(specie);
-        return specieRepository.save(specieAnalyzed.withUUID(specieUuid));
+        return specieRepository.save(specieAnalyzed.withUUID(dnaSpecieUUID));
     }
 }

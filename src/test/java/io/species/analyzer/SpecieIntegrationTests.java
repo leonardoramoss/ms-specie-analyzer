@@ -1,7 +1,6 @@
 package io.species.analyzer;
 
 import io.species.analyzer.infrastructure.AbstractIntegrationTests;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
@@ -13,14 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SpecieIntegrationTests extends AbstractIntegrationTests {
 
     private static final String SIMIAN_ENDPOINT = "/simian";
-    private static final String DNA_TABLE = "SPECIE.DNA";
+    private static final String DNA_TABLE = "DNA.SPECIE";
 
     @Test
     @SqlGroup({
         @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    @DisplayName(value = "")
     void GivenAValidSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
         mockMvc.perform(
                     post(SIMIAN_ENDPOINT)
@@ -36,7 +34,6 @@ class SpecieIntegrationTests extends AbstractIntegrationTests {
             @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    @DisplayName(value = "")
     void GivenAValidSimianDna_whenPerformPostAnAlreadySavedDna_shouldBeReturnFromDatabaseAndStatusOk() throws Exception {
         mockMvc.perform(
                 post(SIMIAN_ENDPOINT)
