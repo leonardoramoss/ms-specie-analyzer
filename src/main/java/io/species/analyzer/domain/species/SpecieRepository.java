@@ -1,0 +1,8 @@
+package io.species.analyzer.domain.species;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface SpecieRepository extends JpaRepository<Specie, UUID> {
+}
