@@ -1,6 +1,5 @@
-package io.species.analyzer.infrastructure.exception.serialization;
+package io.species.analyzer.infrastructure.exception;
 
-import io.species.analyzer.infrastructure.exception.SpecieException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

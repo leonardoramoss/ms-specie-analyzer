@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/v1")
 public class SpecieController {
 
     private final SpeciesApplicationServices speciesApplicationServices;
@@ -22,9 +23,10 @@ public class SpecieController {
     }
 
     @RequestMapping(value = "/simian", method = RequestMethod.POST)
-    public void simian(@RequestBody final SpecieWrapper specieWrapper) {
+    public Specie simian(@RequestBody final SpecieWrapper specieWrapper) {
         final Optional<Specie> optionalSpecie = specieWrapper.getSpecie();
-        final Specie specie = optionalSpecie.orElseThrow(() -> new SimianException(""));
-        speciesApplicationServices.analyzeSimian(specie.markCandidateFor(Species.SIMIAN));
+        return optionalSpecie.map(specie -> speciesApplicationServices.analyzeSpecie(specie.markExpectedSpecieAs(Species.SIMIAN)))
+                .filter(Specie::isSpecieMatchesAsExpected)
+                .orElseThrow(() -> new SimianException(""));
     }
 }

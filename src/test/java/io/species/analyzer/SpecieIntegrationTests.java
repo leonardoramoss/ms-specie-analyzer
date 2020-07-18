@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class SpecieIntegrationTests extends AbstractIntegrationTests {
 
-    private static final String SIMIAN_ENDPOINT = "/simian";
+    private static final String SIMIAN_ENDPOINT = "/v1/simian";
     private static final String DNA_TABLE = "DNA.SPECIE";
 
     @Test

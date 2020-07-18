@@ -9,7 +9,6 @@ public class SpecieDeserializer extends AbstractDeserializer<SpecieWrapper> {
     @Override
     public SpecieWrapper deserialize(final JsonNode jsonNode) {
         final String[] dnaChain = extractAs(jsonNode, SpecieLabels.DNA, String[].class);
-
         return new SpecieWrapper(Specie.of(dnaChain));
     }
 

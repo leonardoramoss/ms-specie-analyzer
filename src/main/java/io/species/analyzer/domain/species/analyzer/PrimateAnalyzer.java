@@ -2,20 +2,17 @@ package io.species.analyzer.domain.species.analyzer;
 
 import io.species.analyzer.domain.species.Specie;
 import io.species.analyzer.domain.species.Species;
-import io.species.analyzer.infrastructure.util.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.regex.Pattern;
 
+import static io.species.analyzer.infrastructure.util.ArrayUtils.reverseValuesAndTransposeStringArrayValuesToDiagonal;
 import static io.species.analyzer.infrastructure.util.ArrayUtils.transposeStringArrayValues;
+import static io.species.analyzer.infrastructure.util.ArrayUtils.transposeStringArrayValuesToDiagonal;
 
 @Component
 public class PrimateAnalyzer implements Analyzer {
-
-    private static final Map<String, Boolean> responseMap = Map.of("ATGCGA-CAGTGC-TTATGT-AGAAGG-CCCCTA-TCACTG", Boolean.TRUE, "ATGCGA-CAGTGC-TTATTT-AGACGG-GCGTCA-TCACTG", Boolean.FALSE);
-
 
     @Override
     public Specie analyze(final Specie specie) {
@@ -50,24 +47,16 @@ public class PrimateAnalyzer implements Analyzer {
             return true;
         }
 
-         final char[][] arrayToMultidimensionalChar = ArrayUtils.stringArrayToMultidimensionalChar(dna);
-         final String[] strings = ArrayUtils.diagonalMultidimensionalCharToArrayString(arrayToMultidimensionalChar);
-         final boolean hasDiagonalSequenceMatched = isSimian(strings, pattern);
+         final boolean hasDiagonalSequenceMatched = isSimian(transposeStringArrayValuesToDiagonal(dna), pattern);
          
          if(hasDiagonalSequenceMatched) {
              return true;
          }
 
-         final String[] reverseStringArrayValues = ArrayUtils.reverseStringArrayValues(dna);
-         final char[][] multidimensionalChar = ArrayUtils.stringArrayToMultidimensionalChar(reverseStringArrayValues);
-         final String[] strings1 = ArrayUtils.diagonalMultidimensionalCharToArrayString(multidimensionalChar);
-
-         final boolean hasReversedDiagonalSequenceMatched = isSimian(strings1, pattern);
-
-         return hasReversedDiagonalSequenceMatched;
+         return isSimian(reverseValuesAndTransposeStringArrayValuesToDiagonal(dna), pattern);
     }
 
-     boolean isSimian(final String[] dna, final Pattern pattern) {
+    private boolean isSimian(final String[] dna, final Pattern pattern) {
         return Arrays.stream(dna).anyMatch(dnaSequence -> pattern.matcher(dnaSequence).matches());
     }
 }

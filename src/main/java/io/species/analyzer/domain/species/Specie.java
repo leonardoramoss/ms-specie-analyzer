@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -29,28 +30,27 @@ public class Specie {
     @Column(name = "DNA")
     private final String dna;
 
-    @Column(name = "SPECIE")
+    @Column(name = "NAME")
     @Enumerated(EnumType.STRING)
-    private Species type;
+    private Species name;
 
     @Transient
-    private Species candidate;
+    private Species expected;
 
     private Specie() {
-        this(null, null);
+        this(null, null, null);
     }
 
     private Specie(final UUID uuid, final String dna) {
-        this.uuid = uuid;
-        this.dna = dna;
-        this.type = Species.NOT_IDENTIFIED;
-        this.candidate = Species.NOT_IDENTIFIED;
+        this(uuid, dna, Species.NOT_IDENTIFIED);
+        this.expected = Species.NOT_IDENTIFIED;
     }
 
-    private Specie(final UUID uuid, final String dna, final Species species) {
+    private Specie(final UUID uuid, final String dna, final Species specie) {
         this.uuid = uuid;
         this.dna = dna;
-        this.type = species;
+        this.name = specie;
+        this.expected = specie;
     }
 
     public static Specie of(final String[] dna) {
@@ -58,7 +58,7 @@ public class Specie {
             checkAllowedNitrogenousBase(dna);
             return new Specie(null, String.join(DELIMITER, dna));
         }
-        throw new IllegalArgumentException();
+        throw new SpecieValidationException(String.format("DNA sequence %s is invalid.", Arrays.toString(dna)));
     }
 
     private static void checkAllowedNitrogenousBase(final String[] dnaChain) {
@@ -91,15 +91,15 @@ public class Specie {
      * @return
      */
     public Specie withUUID(final UUID uuid) {
-        return new Specie(uuid, dna, type);
+        return new Specie(uuid, dna, name);
     }
 
     /**
      *
      * @return
      */
-    public Species getCandidate() {
-        return candidate;
+    public Species getExpected() {
+        return expected;
     }
 
     /**
@@ -108,7 +108,8 @@ public class Specie {
      * @return
      */
     public Specie markAs(final Species species) {
-        this.type = species;
+        Objects.requireNonNull(species);
+        this.name = species;
         return this;
     }
 
@@ -117,19 +118,23 @@ public class Specie {
      * @param species
      * @return
      */
-    public Specie markCandidateFor(final Species species) {
-        this.candidate = species;
+    public Specie markExpectedSpecieAs(final Species species) {
+        Objects.requireNonNull(species);
+        this.expected = species;
         return this;
     }
 
     /**
      *
-     * @param species
      * @return
      */
-    public boolean isSpeciesOf(final Species species) {
-        return Optional.ofNullable(this.type)
+    public boolean isSpecieMatchesAsExpected() {
+        if(Objects.isNull(this.expected)) {
+            return true;
+        }
+
+        return Optional.ofNullable(this.name)
                 .orElseThrow(IllegalArgumentException::new)
-                .equals(species);
+                .equals(this.expected);
     }
 }

@@ -11,22 +11,23 @@ public class ArrayUtils {
     private ArrayUtils() {}
 
     public static char[][] stringArrayToMultidimensionalChar(final String[] stringArray) {
-        final int N = stringArray.length;
-        final char[][] multidimensionalArray = new char[N][N];
 
-        for(int i = 0; i < N; i++) {
-            for(int j = 0; j < N; j++) {
+        final var N = stringArray.length;
+        final var multidimensionalArray = new char[N][N];
+
+        for(var i = 0; i < N; i++) {
+            for(var j = 0; j < N; j++) {
                 multidimensionalArray[i][j] = stringArray[i].toCharArray()[j];
             }
         }
-
         return multidimensionalArray;
     }
 
     public static String[] multidimensionalCharToStringArray(final char[][] multidimensionalChar) {
+
         final var builder = new StringBuilder();
 
-        for(int i = 0; i < multidimensionalChar.length; i++) {
+        for(var i = 0; i < multidimensionalChar.length; i++) {
             builder.append(String.valueOf(multidimensionalChar[i]));
             if(i != multidimensionalChar.length - 1) {
                 builder.append(DELIMITER);
@@ -37,9 +38,17 @@ public class ArrayUtils {
     }
 
     public static String[] transposeStringArrayValues(final String[] stringArray) {
-        final char[][] arrayToMultidimensionalChar = stringArrayToMultidimensionalChar(stringArray);
-        final char[][] transposeRowToColumn = transposeRowToColumn(arrayToMultidimensionalChar);
+        final var arrayToMultidimensionalChar = stringArrayToMultidimensionalChar(stringArray);
+        final var transposeRowToColumn = transposeRowToColumn(arrayToMultidimensionalChar);
         return multidimensionalCharToStringArray(transposeRowToColumn);
+    }
+
+    public static String[] transposeStringArrayValuesToDiagonal(final String[] dna) {
+        return diagonalMultidimensionalCharToArrayString(stringArrayToMultidimensionalChar(dna));
+    }
+
+    public static String[] reverseValuesAndTransposeStringArrayValuesToDiagonal(final String[] dna) {
+        return transposeStringArrayValuesToDiagonal(reverseStringArrayValues(dna));
     }
 
     public static String[] reverseStringArrayValues(final String[] stringArray) {
@@ -53,8 +62,8 @@ public class ArrayUtils {
 
         final char[][] multidimensionalArray = new char[originalMultidimensionalChar.length][originalMultidimensionalChar[0].length];
 
-        for (int i = 0; i < originalMultidimensionalChar[0].length; i++) {
-            for (int j = 0; j < originalMultidimensionalChar.length; j++) {
+        for (var i = 0; i < originalMultidimensionalChar[0].length; i++) {
+            for (var j = 0; j < originalMultidimensionalChar.length; j++) {
                 multidimensionalArray[i][j] = originalMultidimensionalChar[j][i];
             }
         }
@@ -67,11 +76,11 @@ public class ArrayUtils {
         final var length = multidimensionalChar.length;
         final var diagonalLines = (length + length) - 1;
         final var midPoint = (diagonalLines / 2) + 1;
-        final var output = new StringBuilder();
 
+        final var output = new StringBuilder();
         final var itemsInDiagonal= new AtomicLong();
 
-        for (int i = 1; i <= diagonalLines; i++) {
+        for (var i = 1; i <= diagonalLines; i++) {
 
             final var items = new StringBuilder();
 
@@ -95,10 +104,13 @@ public class ArrayUtils {
             }
 
             if (i != diagonalLines) {
-                output.append(items).append(" ");
+                output.append(items);
+                if(i != diagonalLines - 1) {
+                    output.append(DELIMITER);
+                }
             }
         }
 
-        return output.toString().split(" ");
+        return output.toString().split(DELIMITER);
     }
 }

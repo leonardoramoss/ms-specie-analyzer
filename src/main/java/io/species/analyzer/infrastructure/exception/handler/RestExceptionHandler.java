@@ -1,8 +1,9 @@
 package io.species.analyzer.infrastructure.exception.handler;
 
+import io.species.analyzer.infrastructure.exception.SimianException;
 import io.species.analyzer.infrastructure.exception.SpecieException;
 import io.species.analyzer.infrastructure.exception.SpecieValidationException;
-import io.species.analyzer.infrastructure.exception.serialization.SpecieDeserializationException;
+import io.species.analyzer.infrastructure.exception.SpecieDeserializationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SpecieDeserializationException.class)
     protected ResponseEntity<SpecieExceptionData> handleSpecieDeserializationException(final SpecieDeserializationException exception) {
+        return handleException(exception);
+    }
+
+    @ExceptionHandler(SimianException.class)
+    protected ResponseEntity<SpecieExceptionData> handleSimianException(final SimianException exception) {
         return handleException(exception);
     }
 

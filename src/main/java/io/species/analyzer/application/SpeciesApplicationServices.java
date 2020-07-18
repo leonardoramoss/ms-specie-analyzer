@@ -5,15 +5,12 @@ import io.species.analyzer.domain.species.SpecieRepository;
 import io.species.analyzer.domain.species.Species;
 import io.species.analyzer.domain.species.analyzer.Analyzer;
 import io.species.analyzer.infrastructure.annotation.ApplicationServices;
-import io.species.analyzer.infrastructure.exception.SimianException;
 import io.species.analyzer.infrastructure.exception.SpecieException;
 import io.species.analyzer.infrastructure.generator.SpecieUUIDGenerator;
 import io.species.analyzer.infrastructure.generator.UUIDGenerator;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationServices
 public class SpeciesApplicationServices {
@@ -28,24 +25,19 @@ public class SpeciesApplicationServices {
         this.analyzers.putAll(analyzers);
     }
 
-    public void analyzeSimian(final Specie specie) {
-        final Specie validateDNA = this.analyzeSpecie(specie);
-        final boolean isSimian = validateDNA.isSpeciesOf(Species.SIMIAN);
-
-        if(!isSimian)
-            throw new SimianException("");
-    }
-
     public Specie analyzeSpecie(final Specie specie) {
-        final UUID dnaSpecieUUID = uuidGenerator.generate(specie);
+        final var dnaSpecieUUID = uuidGenerator.generate(specie);
 
-        final Optional<Specie> optionalSpecie = specieRepository.findById(dnaSpecieUUID);
+        final var optionalSpecie = specieRepository.findById(dnaSpecieUUID);
         if(optionalSpecie.isPresent()) {
             return optionalSpecie.get();
         }
 
-        final Analyzer analyzer = analyzers.getOrDefault(specie.getCandidate(), defaultAnalyzer);
-        final Specie specieAnalyzed = analyzer.analyze(specie);
-        return specieRepository.save(specieAnalyzed.withUUID(dnaSpecieUUID));
+        final var analyzer = analyzers.getOrDefault(specie.getExpected(), defaultAnalyzer);
+        final var specieAnalyzed = analyzer.analyze(specie);
+
+        specieRepository.save(specieAnalyzed.withUUID(dnaSpecieUUID));
+
+        return specie;
     }
 }

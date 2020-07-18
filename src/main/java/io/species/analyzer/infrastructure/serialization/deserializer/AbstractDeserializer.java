@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.species.analyzer.infrastructure.exception.serialization.SpecieDeserializationException;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import io.species.analyzer.infrastructure.exception.SpecieDeserializationException;
+import io.species.analyzer.infrastructure.exception.SpecieException;
 
 import java.util.Objects;
 
@@ -15,12 +17,17 @@ public abstract class AbstractDeserializer<T> extends JsonDeserializer<T> {
 
     @Override
     public T deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext) {
+
+        JsonNode jsonNode = JsonNodeFactory.instance.objectNode();
+
         try {
             final var codec = jsonParser.getCodec();
-            final var jsonNode = (JsonNode) codec.readTree(jsonParser);
+            jsonNode = codec.readTree(jsonParser);
             return deserialize(jsonNode);
-        } catch (Exception e) {
-            throw new SpecieDeserializationException(e.getMessage());
+        } catch (final SpecieException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new SpecieDeserializationException(String.format("Cannot deserializer %s. Is not a valid payload.", jsonNode));
         }
     }
 
