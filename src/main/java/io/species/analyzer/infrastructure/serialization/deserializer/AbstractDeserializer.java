@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.species.analyzer.infrastructure.exception.SpecieException;
+import io.species.analyzer.infrastructure.exception.serialization.SpecieDeserializationException;
+
+import java.util.Objects;
 
 public abstract class AbstractDeserializer<T> extends JsonDeserializer<T> {
 
-    private final DeserializeOperations operations = new DeserializeOperations();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -19,7 +20,7 @@ public abstract class AbstractDeserializer<T> extends JsonDeserializer<T> {
             final var jsonNode = (JsonNode) codec.readTree(jsonParser);
             return deserialize(jsonNode);
         } catch (Exception e) {
-            throw new SpecieException("", e);
+            throw new SpecieDeserializationException(e.getMessage());
         }
     }
 
@@ -30,6 +31,14 @@ public abstract class AbstractDeserializer<T> extends JsonDeserializer<T> {
     }
 
     protected JsonNode extractAsJsonNode(final JsonNode node, final Enum<?> fieldName) {
-        return operations.extractAsJsonNode(node, fieldName);
+        return hasNonNull(node, fieldName) ? node.findValue(fieldName.toString()) : null;
+    }
+
+    private boolean hasNonNull(final JsonNode node, final Enum<?> fieldName) {
+        return has(node, fieldName) && node.hasNonNull(fieldName.toString());
+    }
+
+    private boolean has(final JsonNode node, final Enum<?> fieldName) {
+        return !Objects.isNull(node) && node.has(fieldName.toString());
     }
 }

@@ -1,5 +1,7 @@
 package io.species.analyzer.domain.species;
 
+import io.species.analyzer.infrastructure.exception.SpecieValidationException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,13 +9,17 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(schema = "DNA", name = "SPECIE")
 public class Specie {
 
+    private static final Pattern ALLOWED_NITROGENOUS_BASE = Pattern.compile("[ATCG]+");
     private static final String DELIMITER = "-";
 
     @Id
@@ -48,8 +54,20 @@ public class Specie {
     }
 
     public static Specie of(final String[] dna) {
-        final String dnaSequence = String.join(DELIMITER, Optional.ofNullable(dna).orElseThrow(IllegalArgumentException::new));
-        return new Specie(null, dnaSequence);
+        if(dna != null && dna.length > 0) {
+            checkAllowedNitrogenousBase(dna);
+            return new Specie(null, String.join(DELIMITER, dna));
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private static void checkAllowedNitrogenousBase(final String[] dnaChain) {
+        Arrays.stream(dnaChain).forEach(dna -> {
+            final Matcher matcher = ALLOWED_NITROGENOUS_BASE.matcher(dna);
+            if(!matcher.matches()) {
+                throw new SpecieValidationException(String.format("DNA sequence %s in %s is not valid.", dna, Arrays.toString(dnaChain)));
+            }
+        });
     }
 
     /**

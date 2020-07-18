@@ -19,14 +19,14 @@ class SpecieIntegrationTests extends AbstractIntegrationTests {
         @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    void GivenAValidSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
+    void GivenAValidHorizontalSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
         mockMvc.perform(
                     post(SIMIAN_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonFileAsString("mock/mock_simian_payload.json")))
+                        .content(getJsonFileAsString("mock/mock_simian_horizontal_payload.json")))
                 .andExpect(status().isOk());
 
-        verifyDatabase("expected_simian_specie.xml", DNA_TABLE);
+        verifyDatabase("expected_simian_horizontal_specie.xml", DNA_TABLE);
     }
 
     @Test
@@ -34,22 +34,67 @@ class SpecieIntegrationTests extends AbstractIntegrationTests {
             @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    void GivenAValidSimianDna_whenPerformPostAnAlreadySavedDna_shouldBeReturnFromDatabaseAndStatusOk() throws Exception {
+    void GivenAValidVerticalSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
         mockMvc.perform(
                 post(SIMIAN_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonFileAsString("mock/mock_simian_payload.json")))
+                        .content(getJsonFileAsString("mock/mock_simian_vertical_payload.json")))
                 .andExpect(status().isOk());
 
-        verifyDatabase("expected_simian_specie.xml", DNA_TABLE);
+        verifyDatabase("expected_simian_vertical_species.xml", DNA_TABLE);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
+    void GivenAValidDiagonalSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
+        mockMvc.perform(
+                post(SIMIAN_ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getJsonFileAsString("mock/mock_simian_diagonal_payload.json")))
+                .andExpect(status().isOk());
+
+        verifyDatabase("expected_simian_diagonal_species.xml", DNA_TABLE);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
+    void GivenAValidReversedDiagonalSimianDna_whenPerformPost_shouldBeProcessedAndSavedOnDatabaseAndReturnStatusOk() throws Exception {
+        mockMvc.perform(
+                post(SIMIAN_ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getJsonFileAsString("mock/mock_simian_reversed_diagonal_payload.json")))
+                .andExpect(status().isOk());
+
+        verifyDatabase("expected_simian_reversed_diagonal_species.xml", DNA_TABLE);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = { "classpath:clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
+    void GivenAValidHorizontalSimianDna_whenPerformPostAnAlreadySavedDna_shouldBeReturnFromDatabaseAndStatusOk() throws Exception {
+        mockMvc.perform(
+                post(SIMIAN_ENDPOINT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getJsonFileAsString("mock/mock_simian_horizontal_payload.json")))
+                .andExpect(status().isOk());
+
+        verifyDatabase("expected_simian_horizontal_specie.xml", DNA_TABLE);
 
         mockMvc.perform(
                 post(SIMIAN_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(getJsonFileAsString("mock/mock_simian_payload.json")))
+                        .content(getJsonFileAsString("mock/mock_simian_horizontal_payload.json")))
                 .andExpect(status().isOk());
 
-        verifyDatabase("expected_simian_specie.xml", DNA_TABLE);
+        verifyDatabase("expected_simian_horizontal_specie.xml", DNA_TABLE);
     }
 
     @Test
