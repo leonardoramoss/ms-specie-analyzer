@@ -1,0 +1,16 @@
+spring:
+    datasource:
+        name: species
+        username: ${SPECIES_DATABASE_USER}
+        password: ${SPECIES_DATABASE_PASSWORD}
+        url: jdbc:postgresql://${SPECIES_DATABASE_HOST}:${SPECIES_DATABASE_PORT}/${SPECIES_DATABASE_NAME}
+        driver-class-name: org.postgresql.Driver
+    liquibase:
+        enabled: true
+        change-log: classpath:/db/changelog/db.changelog-master.xml
+        contexts: local
+        default-schema: LIQUIBASE
+        drop-first: false
+        user: ${SPECIES_DATABASE_USER}
+        password: ${SPECIES_DATABASE_PASSWORD}
+        url: jdbc:postgresql://${SPECIES_DATABASE_HOST}:${SPECIES_DATABASE_PORT}/${SPECIES_DATABASE_NAME}

@@ -31,8 +31,14 @@ public class StatsHumanSimianRatioExecutor implements StatsExecutor<StatsHumanSi
         final var simianCount = speciesCount.getOrDefault(SpeciesIdentifier.SIMIAN, 0L);
         final var humanCount = speciesCount.getOrDefault(SpeciesIdentifier.HUMAN, 0L);
 
-        final var ratio = BigDecimal.valueOf((simianCount * 100.0f) / humanCount)
-                .divide(BigDecimal.valueOf(100), 1, RoundingMode.HALF_UP);
+        var ratio = BigDecimal.ZERO;
+
+        if (humanCount == 0L) {
+            ratio = BigDecimal.valueOf(simianCount);
+        } else {
+            ratio = BigDecimal.valueOf((simianCount * 100.0f) / humanCount)
+                    .divide(BigDecimal.valueOf(100), 1, RoundingMode.HALF_UP);
+        }
 
         return new StatsHumanSimianRatioResult(humanCount, simianCount, ratio);
     }

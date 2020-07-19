@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+    database:
+        container_name: database-species
+        image: postgres:12
+        volumes:
+            - ${HOME}/Docker/postgres/species:/var/lib/postgresql/data
+            - ./init/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+        env_file:
+            - ./.env.local
+        environment:
+            POSTGRES_USER: ${SPECIES_DATABASE_USER}
+            POSTGRES_PASSWORD: ${SPECIES_DATABASE_PASSWORD}
+            POSTGRES_DB: ${SPECIES_DATABASE_NAME}
+        ports:
+            - 5432:5432
+        networks:
+            - species-network
+
+networks:
+    species-network:
+        driver: bridge
