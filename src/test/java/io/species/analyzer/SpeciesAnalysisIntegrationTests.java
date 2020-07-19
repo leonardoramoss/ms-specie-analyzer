@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -138,8 +137,8 @@ class SpeciesAnalysisIntegrationTests extends AbstractIntegrationTests {
             @Sql(scripts = { "classpath:sqls/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = { "classpath:sqls/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    void test() throws Exception {
-        final MvcResult mvcResult = mockMvc.perform(get(STATS_ENDPOINT)).andExpect(status().isOk()).andReturn();
+    void whenPerformGetStats_shouldBeReturnRatioStatsAndStatusOk() throws Exception {
+        final var mvcResult = mockMvc.perform(get(STATS_ENDPOINT)).andExpect(status().isOk()).andReturn();
         assertEquals(getJsonFileAsString("expected/response/stats/expected_stats.json"), getMvcResultAsString(mvcResult), true);
     }
 }
