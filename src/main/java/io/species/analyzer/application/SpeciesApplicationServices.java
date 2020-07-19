@@ -1,13 +1,15 @@
 package io.species.analyzer.application;
 
-import io.species.analyzer.domain.species.Specie;
-import io.species.analyzer.domain.species.SpecieRepository;
-import io.species.analyzer.domain.species.Species;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
+import io.species.analyzer.domain.species.SpeciesAnalysisRepository;
+import io.species.analyzer.domain.species.SpeciesIdentifier;
 import io.species.analyzer.domain.species.analyzer.Analyzer;
+import io.species.analyzer.domain.species.stats.StatsExecutor;
+import io.species.analyzer.domain.species.stats.StatsIdentifier;
+import io.species.analyzer.domain.species.stats.StatsResult;
 import io.species.analyzer.infrastructure.annotation.ApplicationServices;
 import io.species.analyzer.infrastructure.exception.SpecieException;
-import io.species.analyzer.infrastructure.generator.SpecieUUIDGenerator;
-import io.species.analyzer.infrastructure.generator.UUIDGenerator;
+import io.species.analyzer.infrastructure.generator.DnaSpecieUUIDGenerator;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,29 +17,36 @@ import java.util.Map;
 @ApplicationServices
 public class SpeciesApplicationServices {
 
-    private final SpecieRepository specieRepository;
-    private final Map<Species, Analyzer> analyzers = new EnumMap<>(Species.class);
-    private final UUIDGenerator<Specie> uuidGenerator = new SpecieUUIDGenerator();
-    private final Analyzer defaultAnalyzer = (final Specie s) -> { throw new SpecieException(""); };
+    private final SpeciesAnalysisRepository speciesAnalysisRepository;
+    private final Map<SpeciesIdentifier, Analyzer> analyzers = new EnumMap<>(SpeciesIdentifier.class);
+    private final Map<StatsIdentifier, StatsExecutor> executors = new EnumMap<>(StatsIdentifier.class);
 
-    public SpeciesApplicationServices(final SpecieRepository specieRepository, final Map<Species, Analyzer> analyzers) {
-        this.specieRepository = specieRepository;
+    public SpeciesApplicationServices(final SpeciesAnalysisRepository speciesAnalysisRepository,
+                                      final Map<SpeciesIdentifier, Analyzer> analyzers,
+                                      final Map<StatsIdentifier, StatsExecutor> executors) {
+        this.speciesAnalysisRepository = speciesAnalysisRepository;
         this.analyzers.putAll(analyzers);
+        this.executors.putAll(executors);
     }
 
-    public Specie analyzeSpecie(final Specie specie) {
-        final var dnaSpecieUUID = uuidGenerator.generate(specie);
+    public SpeciesAnalysis analyzeSpecie(final SpeciesAnalysis speciesAnalysis) {
+        final var uuidGenerator = new DnaSpecieUUIDGenerator();
+        final var dnaSpecieUUID = uuidGenerator.generate(speciesAnalysis);
 
-        final var optionalSpecie = specieRepository.findById(dnaSpecieUUID);
+        final var optionalSpecie = speciesAnalysisRepository.findById(dnaSpecieUUID);
         if(optionalSpecie.isPresent()) {
             return optionalSpecie.get();
         }
 
-        final var analyzer = analyzers.getOrDefault(specie.getExpected(), defaultAnalyzer);
-        final var specieAnalyzed = analyzer.analyze(specie);
+        final var analyzer = analyzers.getOrDefault(speciesAnalysis.getExpectedIdentifier(), (final SpeciesAnalysis s) -> { throw new SpecieException(""); });
+        final var specieAnalyzed = analyzer.analyze(speciesAnalysis);
 
-        specieRepository.save(specieAnalyzed.withUUID(dnaSpecieUUID));
+        speciesAnalysisRepository.save(specieAnalyzed.withUUID(dnaSpecieUUID));
 
-        return specie;
+        return specieAnalyzed;
+    }
+
+    public StatsResult viewStats(final StatsIdentifier statsIdentifier) {
+        return executors.getOrDefault(statsIdentifier, () -> { throw new SpecieException(""); }).execute();
     }
 }

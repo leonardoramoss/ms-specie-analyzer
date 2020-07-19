@@ -1,6 +1,7 @@
 package io.species.analyzer.infrastructure.serialization.serializer;
 
 import io.species.analyzer.infrastructure.exception.handler.SpecieExceptionData;
+import io.species.analyzer.infrastructure.serialization.SerializationLabel;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +20,7 @@ public class SpecieExceptionDataSerializer extends AbstractSerializer<SpecieExce
         this.writeEndObject();
     }
 
-    private enum SpecieExceptionDataLabels {
+    private enum SpecieExceptionDataLabels implements SerializationLabel {
 
         CODE("code"),
         CAUSE("cause"),
@@ -33,8 +34,8 @@ public class SpecieExceptionDataSerializer extends AbstractSerializer<SpecieExce
         }
 
         @Override
-        public String toString() {
-            return this.label;
+        public String label() {
+            return label;
         }
     }
 }

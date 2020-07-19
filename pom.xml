@@ -8,10 +8,10 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>io.species</groupId>
-	<artifactId>species-analyzer</artifactId>
+	<groupId>io.speciesIdentifier</groupId>
+	<artifactId>speciesIdentifier-analyzer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>species-analyzer</name>
+	<name>speciesIdentifier-analyzer</name>
 	<description>Species Analyzer</description>
 
 	<properties>

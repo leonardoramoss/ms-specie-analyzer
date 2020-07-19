@@ -1,14 +1,14 @@
 package io.species.analyzer.domain.species.analyzer;
 
-import io.species.analyzer.domain.species.Specie;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
 
 @FunctionalInterface
 public interface Analyzer {
 
     /**
      *
-     * @param specie
+     * @param speciesAnalysis
      * @return
      */
-    Specie analyze(final Specie specie);
+    SpeciesAnalysis analyze(final SpeciesAnalysis speciesAnalysis);
 }

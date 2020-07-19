@@ -1,6 +1,6 @@
 package io.species.analyzer.configuration;
 
-import io.species.analyzer.domain.species.SpecieRepository;
+import io.species.analyzer.domain.species.SpeciesAnalysisRepository;
 import org.eclipse.persistence.config.BatchWriting;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.ObjectProvider;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackageClasses = { SpecieRepository.class })
+@EnableJpaRepositories(basePackageClasses = { SpeciesAnalysisRepository.class })
 public class DatabaseConfiguration extends JpaBaseConfiguration {
 
     private static final String TRUE = "true";

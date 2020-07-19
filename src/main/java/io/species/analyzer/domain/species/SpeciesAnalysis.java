@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,8 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Entity
-@Table(schema = "DNA", name = "SPECIE")
-public class Specie {
+@Table(schema = "SPECIE", name = "SPECIES_ANALYSIS")
+public class SpeciesAnalysis {
 
     private static final Pattern ALLOWED_NITROGENOUS_BASE = Pattern.compile("[ATCG]+");
     private static final String DELIMITER = "-";
@@ -30,33 +31,37 @@ public class Specie {
     @Column(name = "DNA")
     private final String dna;
 
-    @Column(name = "NAME")
+    @Column(name = "SPECIE")
     @Enumerated(EnumType.STRING)
-    private Species name;
+    private SpeciesIdentifier identifier;
+
+    @Column(name = "ANALYZED_AT")
+    private LocalDateTime analyzedAt;
 
     @Transient
-    private Species expected;
+    private SpeciesIdentifier expectedIdentifier;
 
-    private Specie() {
+    private SpeciesAnalysis() {
         this(null, null, null);
     }
 
-    private Specie(final UUID uuid, final String dna) {
-        this(uuid, dna, Species.NOT_IDENTIFIED);
-        this.expected = Species.NOT_IDENTIFIED;
+    private SpeciesAnalysis(final UUID uuid, final String dna) {
+        this(uuid, dna, SpeciesIdentifier.NOT_IDENTIFIED);
+        this.expectedIdentifier = SpeciesIdentifier.NOT_IDENTIFIED;
     }
 
-    private Specie(final UUID uuid, final String dna, final Species specie) {
+    private SpeciesAnalysis(final UUID uuid, final String dna, final SpeciesIdentifier specie) {
         this.uuid = uuid;
         this.dna = dna;
-        this.name = specie;
-        this.expected = specie;
+        this.identifier = specie;
+        this.expectedIdentifier = specie;
+        this.analyzedAt = LocalDateTime.now();
     }
 
-    public static Specie of(final String[] dna) {
+    public static SpeciesAnalysis of(final String[] dna) {
         if(dna != null && dna.length > 0) {
             checkAllowedNitrogenousBase(dna);
-            return new Specie(null, String.join(DELIMITER, dna));
+            return new SpeciesAnalysis(null, String.join(DELIMITER, dna));
         }
         throw new SpecieValidationException(String.format("DNA sequence %s is invalid.", Arrays.toString(dna)));
     }
@@ -90,37 +95,41 @@ public class Specie {
      * @param uuid
      * @return
      */
-    public Specie withUUID(final UUID uuid) {
-        return new Specie(uuid, dna, name);
+    public SpeciesAnalysis withUUID(final UUID uuid) {
+        return new SpeciesAnalysis(uuid, dna, identifier);
     }
 
     /**
      *
      * @return
      */
-    public Species getExpected() {
-        return expected;
+    public SpeciesIdentifier getExpectedIdentifier() {
+        return expectedIdentifier;
+    }
+
+    public SpeciesIdentifier getIdentifier() {
+        return identifier;
     }
 
     /**
      *
-     * @param species
+     * @param speciesIdentifier
      * @return
      */
-    public Specie markAs(final Species species) {
-        Objects.requireNonNull(species);
-        this.name = species;
+    public SpeciesAnalysis markIdentifiedAs(final SpeciesIdentifier speciesIdentifier) {
+        Objects.requireNonNull(speciesIdentifier);
+        this.identifier = speciesIdentifier;
         return this;
     }
 
     /**
      *
-     * @param species
+     * @param expectedIdentifier
      * @return
      */
-    public Specie markExpectedSpecieAs(final Species species) {
-        Objects.requireNonNull(species);
-        this.expected = species;
+    public SpeciesAnalysis markExpectedIdentifierAs(final SpeciesIdentifier expectedIdentifier) {
+        Objects.requireNonNull(expectedIdentifier);
+        this.expectedIdentifier = expectedIdentifier;
         return this;
     }
 
@@ -128,13 +137,13 @@ public class Specie {
      *
      * @return
      */
-    public boolean isSpecieMatchesAsExpected() {
-        if(Objects.isNull(this.expected)) {
+    public boolean isIdentifierMatchesAsExpected() {
+        if(Objects.isNull(this.expectedIdentifier)) {
             return true;
         }
 
-        return Optional.ofNullable(this.name)
+        return Optional.ofNullable(this.identifier)
                 .orElseThrow(IllegalArgumentException::new)
-                .equals(this.expected);
+                .equals(this.expectedIdentifier);
     }
 }

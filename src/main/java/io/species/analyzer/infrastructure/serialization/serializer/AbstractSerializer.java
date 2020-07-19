@@ -3,9 +3,11 @@ package io.species.analyzer.infrastructure.serialization.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import io.species.analyzer.infrastructure.serialization.SerializationLabel;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public abstract class AbstractSerializer<T> extends JsonSerializer<T> {
 
@@ -23,14 +25,36 @@ public abstract class AbstractSerializer<T> extends JsonSerializer<T> {
         jsonGenerator.writeStartObject();
     }
 
-    public void writeNumberField(final Enum<?> fieldName, final Integer value) throws IOException {
-        if(!ObjectUtils.isEmpty(value))
-            jsonGenerator.writeNumberField(fieldName.toString(), value);
+    public void writeNumberField(final SerializationLabel serializationLabel, final Integer value) throws IOException {
+        this.writeNumberField(serializationLabel.label(), value);
     }
 
-    public void writeStringField(final Enum<?> fieldName, final String value) throws IOException {
+    public void writeNumberField(final SerializationLabel serializationLabel, final BigDecimal value) throws IOException {
+        this.writeNumberField(serializationLabel.label(), value);
+    }
+
+    public void writeStringField(final SerializationLabel serializationLabel, final String value) throws IOException {
+        this.writeStringField(serializationLabel.toString(), value);
+    }
+
+    public void writeNumberField(final SerializationLabel serializationLabel, final Long value) throws IOException {
+        if(!ObjectUtils.isEmpty(value))
+            jsonGenerator.writeNumberField(serializationLabel.label(), value);
+    }
+
+    public void writeNumberField(final String fieldName, final Integer value) throws IOException {
+        if(!ObjectUtils.isEmpty(value))
+            jsonGenerator.writeNumberField(fieldName, value);
+    }
+
+    public void writeNumberField(final String fieldName, final BigDecimal value) throws IOException {
+        if(!ObjectUtils.isEmpty(value))
+            jsonGenerator.writeNumberField(fieldName, value);
+    }
+
+    public void writeStringField(final String fieldName, final String value) throws IOException {
         if (!ObjectUtils.isEmpty(value))
-            jsonGenerator.writeStringField(fieldName.toString(), value);
+            jsonGenerator.writeStringField(fieldName, value);
     }
 
     public void writeEndObject() throws IOException {

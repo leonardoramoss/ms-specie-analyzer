@@ -1,7 +1,7 @@
 package io.species.analyzer.domain.species.analyzer;
 
-import io.species.analyzer.domain.species.Specie;
-import io.species.analyzer.domain.species.Species;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
+import io.species.analyzer.domain.species.SpeciesIdentifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -15,16 +15,16 @@ import static io.species.analyzer.infrastructure.util.ArrayUtils.transposeString
 public class PrimateAnalyzer implements Analyzer {
 
     @Override
-    public Specie analyze(final Specie specie) {
-        final boolean isSimian = isSimian(specie.getOriginalDna());
+    public SpeciesAnalysis analyze(final SpeciesAnalysis speciesAnalysis) {
+        final boolean isSimian = isSimian(speciesAnalysis.getOriginalDna());
 
         if(isSimian) {
-            specie.markAs(Species.SIMIAN);
+            speciesAnalysis.markIdentifiedAs(SpeciesIdentifier.SIMIAN);
         } else {
-            specie.markAs(Species.HUMAN);
+            speciesAnalysis.markIdentifiedAs(SpeciesIdentifier.HUMAN);
         }
 
-        return specie;
+        return speciesAnalysis;
     }
 
     /**

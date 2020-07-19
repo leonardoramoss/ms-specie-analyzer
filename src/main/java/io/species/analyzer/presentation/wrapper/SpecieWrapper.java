@@ -1,7 +1,7 @@
 package io.species.analyzer.presentation.wrapper;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.species.analyzer.domain.species.Specie;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.infrastructure.serialization.deserializer.SpecieDeserializer;
 
 import java.util.Optional;
@@ -9,13 +9,13 @@ import java.util.Optional;
 @JsonDeserialize(using = SpecieDeserializer.class)
 public class SpecieWrapper {
 
-    private final Optional<Specie> specie;
+    private final Optional<SpeciesAnalysis> specie;
 
-    public SpecieWrapper(final Specie specie) {
-        this.specie = Optional.ofNullable(specie);
+    public SpecieWrapper(final SpeciesAnalysis speciesAnalysis) {
+        this.specie = Optional.ofNullable(speciesAnalysis);
     }
 
-    public Optional<Specie> getSpecie() {
+    public Optional<SpeciesAnalysis> getSpecie() {
         return this.specie;
     }
 }

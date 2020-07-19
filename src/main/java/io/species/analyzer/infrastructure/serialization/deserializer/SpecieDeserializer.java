@@ -1,18 +1,19 @@
 package io.species.analyzer.infrastructure.serialization.deserializer;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.species.analyzer.domain.species.Specie;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
+import io.species.analyzer.infrastructure.serialization.SerializationLabel;
 import io.species.analyzer.presentation.wrapper.SpecieWrapper;
 
 public class SpecieDeserializer extends AbstractDeserializer<SpecieWrapper> {
 
     @Override
     public SpecieWrapper deserialize(final JsonNode jsonNode) {
-        final String[] dnaChain = extractAs(jsonNode, SpecieLabels.DNA, String[].class);
-        return new SpecieWrapper(Specie.of(dnaChain));
+        final String[] dnaChain = readFieldAs(jsonNode, SpecieLabels.DNA, String[].class);
+        return new SpecieWrapper(SpeciesAnalysis.of(dnaChain));
     }
 
-    private enum SpecieLabels {
+    private enum SpecieLabels implements SerializationLabel {
 
         DNA("dna");
 
@@ -23,8 +24,8 @@ public class SpecieDeserializer extends AbstractDeserializer<SpecieWrapper> {
         }
 
         @Override
-        public String toString() {
-            return this.label;
+        public String label() {
+            return label;
         }
     }
 }

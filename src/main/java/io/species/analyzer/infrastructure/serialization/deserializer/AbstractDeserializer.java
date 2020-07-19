@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import io.species.analyzer.infrastructure.exception.SpecieDeserializationException;
 import io.species.analyzer.infrastructure.exception.SpecieException;
+import io.species.analyzer.infrastructure.serialization.SerializationLabel;
 
 import java.util.Objects;
 
@@ -33,19 +34,19 @@ public abstract class AbstractDeserializer<T> extends JsonDeserializer<T> {
 
     public abstract T deserialize(final JsonNode jsonNode);
 
-    protected <R> R extractAs(final JsonNode jsonNode, final Enum<?> field, final Class<R> type) {
-        return objectMapper.convertValue(extractAsJsonNode(jsonNode, field), type);
+    protected <R> R readFieldAs(final JsonNode jsonNode, final SerializationLabel serializationLabel, final Class<R> type) {
+        return objectMapper.convertValue(readJsonNodeField(jsonNode, serializationLabel), type);
     }
 
-    protected JsonNode extractAsJsonNode(final JsonNode node, final Enum<?> fieldName) {
-        return hasNonNull(node, fieldName) ? node.findValue(fieldName.toString()) : null;
+    protected JsonNode readJsonNodeField(final JsonNode node, final SerializationLabel serializationLabel) {
+        return hasNonNull(node, serializationLabel) ? node.findValue(serializationLabel.label()) : null;
     }
 
-    private boolean hasNonNull(final JsonNode node, final Enum<?> fieldName) {
-        return has(node, fieldName) && node.hasNonNull(fieldName.toString());
+    private boolean hasNonNull(final JsonNode node, final SerializationLabel serializationLabel) {
+        return has(node, serializationLabel) && node.hasNonNull(serializationLabel.label());
     }
 
-    private boolean has(final JsonNode node, final Enum<?> fieldName) {
-        return !Objects.isNull(node) && node.has(fieldName.toString());
+    private boolean has(final JsonNode node, final SerializationLabel serializationLabel) {
+        return !Objects.isNull(node) && node.has(serializationLabel.label());
     }
 }

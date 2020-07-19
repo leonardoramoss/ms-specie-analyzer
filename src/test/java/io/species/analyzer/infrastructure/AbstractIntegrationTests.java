@@ -72,7 +72,7 @@ public abstract class AbstractIntegrationTests {
 
     protected void verifyDatabase(final String fileName, final String tableName, final String ... ignoredColumns) throws Exception {
         final var selectQuery = "SELECT * FROM " + tableName;
-        assertEqualsByQuery(getDataSet("/datasets/" + fileName), getDatabaseConnection(), selectQuery, tableName, ignoredColumns);
+        assertEqualsByQuery(getDataSet("/expected/datasets/" + fileName), getDatabaseConnection(), selectQuery, tableName, ignoredColumns);
     }
 
     private IDataSet getDataSet(final String dataset) throws DataSetException {
