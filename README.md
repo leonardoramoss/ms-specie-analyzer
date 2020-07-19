@@ -69,7 +69,7 @@
 
 ### Prod
 
-The API is running at: 
+The API is running at: https://species-ml.herokuapp.com
 
 ### Local
 

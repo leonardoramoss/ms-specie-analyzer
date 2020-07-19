@@ -5,7 +5,7 @@ services:
         image: postgres:12
         volumes:
             - ${HOME}/Docker/postgres/species:/var/lib/postgresql/data
-            - ./init/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+            - ./src/main/resources/db/changelog/db.changelog-schema.sql:/docker-entrypoint-initdb.d/db.changelog-schema.sql
         env_file:
             - ./.env.local
         environment:
