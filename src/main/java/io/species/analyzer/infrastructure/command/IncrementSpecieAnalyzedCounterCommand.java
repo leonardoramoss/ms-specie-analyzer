@@ -23,11 +23,12 @@ public class IncrementSpecieAnalyzedCounterCommand implements Command<SpeciesAna
     }
 
     @Override
-    public synchronized void execute(final SpeciesAnalysis argument) {
-        final var speciesAnalysisCounter = adapter.adapt(argument);
-        final var uuid = uuidGenerator.generate(speciesAnalysisCounter);
-        final var optionalCounter = specieAnalysisCounterRepository.findById(uuid);
-        final var analysisCounter = optionalCounter.orElse(speciesAnalysisCounter);
-        specieAnalysisCounterRepository.save(analysisCounter.withUUID(uuid).increment());
+    public synchronized void execute(final SpeciesAnalysis speciesAnalysis) {
+        final int updatedSpeciesCounter = specieAnalysisCounterRepository.incrementSpecieCounter(speciesAnalysis.getIdentifier());
+
+        if(updatedSpeciesCounter != 1) {
+            final var speciesAnalysisCounter = adapter.adapt(speciesAnalysis);
+            specieAnalysisCounterRepository.save(speciesAnalysisCounter.withUUID(uuidGenerator));
+        }
     }
 }

@@ -15,8 +15,8 @@ public class StatsResultWrapperSerializer extends AbstractSerializer<StatsResult
         final var optionalStatsResult = statsResultWrapper.getStats();
         if(optionalStatsResult.isPresent()) {
             final var statsResult = optionalStatsResult.get();
-            final var serializer = serializers.get(statsResult.getClass());
-            serializer.serialize(statsResult, jsonWriter);
+            final var abstractSerializer = serializers.get(statsResult.getClass());
+            abstractSerializer.serialize(statsResult, jsonWriter);
         }
     }
 }

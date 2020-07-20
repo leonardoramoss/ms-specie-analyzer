@@ -72,9 +72,13 @@ public abstract class AbstractIntegrationTests {
         }
     }
 
-    protected JsonNode getJsonNodeFromJsonFile(final String path) throws IOException {
-        final var text = getJsonFileAsString(path);
-        return getJsonNodeFromString(text);
+    protected JsonNode getJsonNodeFromJsonFile(final String path) {
+        try {
+            final var text = getJsonFileAsString(path);
+            return getJsonNodeFromString(text);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected JsonNode getJsonNodeFromString(final String string) throws IOException {
