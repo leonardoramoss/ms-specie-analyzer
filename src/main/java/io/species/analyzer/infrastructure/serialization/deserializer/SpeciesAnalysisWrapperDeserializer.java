@@ -3,16 +3,16 @@ package io.species.analyzer.infrastructure.serialization.deserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.infrastructure.serialization.SerializationLabel;
-import io.species.analyzer.presentation.wrapper.SpecieWrapper;
+import io.species.analyzer.presentation.wrapper.SpeciesAnalysisWrapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SpecieDeserializer extends AbstractDeserializer<SpecieWrapper> {
+public class SpeciesAnalysisWrapperDeserializer extends AbstractDeserializer<SpeciesAnalysisWrapper> {
 
     @Override
-    public SpecieWrapper deserialize(final JsonNode jsonNode) {
-        final String[] dnaChain = readFieldAs(jsonNode, SpecieLabels.DNA, String[].class);
-        return new SpecieWrapper(SpeciesAnalysis.of(dnaChain));
+    public SpeciesAnalysisWrapper deserialize(final JsonNode jsonNode) {
+        final var dnaChain = readFieldAs(jsonNode, SpecieLabels.DNA, String[].class);
+        return new SpeciesAnalysisWrapper(SpeciesAnalysis.of(dnaChain));
     }
 
     private enum SpecieLabels implements SerializationLabel {

@@ -27,6 +27,10 @@ public class SpecieExceptionData {
         return new SpecieExceptionData(responseStatus.code(), responseStatus.reason(), specieException.getMessage());
     }
 
+    public static SpecieExceptionData of(final HttpStatus httpStatus, final String reason, final String message) {
+        return new SpecieExceptionData(httpStatus, reason, message);
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }

@@ -1,11 +1,7 @@
 package io.species.analyzer.domain.species.stats;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.species.analyzer.infrastructure.serialization.serializer.StatsHumanSimianRatioResultSerializer;
-
 import java.math.BigDecimal;
 
-@JsonSerialize(using = StatsHumanSimianRatioResultSerializer.class)
 public class StatsHumanSimianRatioResult implements StatsResult<BigDecimal> {
 
     private final Long humanCount;
