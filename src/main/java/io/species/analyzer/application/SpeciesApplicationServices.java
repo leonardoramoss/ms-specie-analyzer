@@ -37,21 +37,20 @@ public class SpeciesApplicationServices {
     }
 
     public SpeciesAnalysis analyzeSpecie(final SpeciesAnalysis speciesAnalysis) {
-        final var optionalSpecie = retriever.retrieve(speciesAnalysis);
-        if(optionalSpecie.isPresent()) {
-            return optionalSpecie.get();
-        }
+        final var optionalAnalyzedSpecie = retriever.retrieve(speciesAnalysis);
+        final Analyzer defaultAnalyzer = (final SpeciesAnalysis s) -> { throw new SpecieException("There are no analyzer for this specie: " + s.getIdentifier()); };
 
-        final var analyzer = analyzers.getOrDefault(speciesAnalysis.getExpectedIdentifier(),
-                (final SpeciesAnalysis s) -> { throw new SpecieException("There are no analyzer for this specie: " + s.getIdentifier()); });
-        final var specieAnalyzed = analyzer.analyze(speciesAnalysis);
-
-        eventNotifier.notify(SpecieAnalyzedEvent.of(specieAnalyzed));
-
-        return specieAnalyzed;
+        return optionalAnalyzedSpecie.orElseGet(() -> {
+            final var analyzer = analyzers.getOrDefault(speciesAnalysis.getExpectedIdentifier(), defaultAnalyzer);
+            final var specieAnalyzed = analyzer.analyze(speciesAnalysis);
+            eventNotifier.notify(SpecieAnalyzedEvent.of(specieAnalyzed));
+            return specieAnalyzed;
+        });
     }
 
     public StatsResult viewStats(final StatsIdentifier statsIdentifier) {
-        return executors.getOrDefault(statsIdentifier, () -> { throw new SpecieException("There are no stats executor for this identifier: " + statsIdentifier.name()); }).execute();
+        final StatsExecutor defaultStatsExecutor = () -> { throw new SpecieException("There are no stats executor for this identifier: " + statsIdentifier.name()); };
+        final var statsExecutor = executors.getOrDefault(statsIdentifier, defaultStatsExecutor);
+        return statsExecutor.execute();
     }
 }
