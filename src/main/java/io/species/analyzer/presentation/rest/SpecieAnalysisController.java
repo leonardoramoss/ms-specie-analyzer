@@ -3,8 +3,6 @@ package io.species.analyzer.presentation.rest;
 import io.species.analyzer.application.SpeciesApplicationServices;
 import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.domain.species.SpeciesIdentifier;
-import io.species.analyzer.domain.species.stats.StatsIdentifier;
-import io.species.analyzer.domain.species.stats.StatsResult;
 import io.species.analyzer.infrastructure.exception.SimianException;
 import io.species.analyzer.presentation.wrapper.SpecieWrapper;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,24 +14,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
-public class SpecieController {
+public class SpecieAnalysisController {
 
     private final SpeciesApplicationServices speciesApplicationServices;
 
-    public SpecieController(final SpeciesApplicationServices speciesApplicationServices) {
+    public SpecieAnalysisController(final SpeciesApplicationServices speciesApplicationServices) {
         this.speciesApplicationServices = speciesApplicationServices;
     }
 
     @RequestMapping(value = "/simian", method = RequestMethod.POST)
-    public SpeciesAnalysis simian(@RequestBody final SpecieWrapper specieWrapper) {
+    public void simian(@RequestBody final SpecieWrapper specieWrapper) {
         final Optional<SpeciesAnalysis> optionalSpecie = specieWrapper.getSpecie();
-        return optionalSpecie.map(specie -> speciesApplicationServices.analyzeSpecie(specie.markExpectedIdentifierAs(SpeciesIdentifier.SIMIAN)))
+        optionalSpecie.map(specie -> speciesApplicationServices.analyzeSpecie(specie.markExpectedIdentifierAs(SpeciesIdentifier.SIMIAN)))
                 .filter(SpeciesAnalysis::isIdentifierMatchesAsExpected)
-                .orElseThrow(() -> new SimianException(""));
-    }
-
-    @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public StatsResult stats() {
-        return this.speciesApplicationServices.viewStats(StatsIdentifier.RATIO_SIMIAN_HUMAN);
+                .orElseThrow(() -> new SimianException("Is not a simian"));
     }
 }

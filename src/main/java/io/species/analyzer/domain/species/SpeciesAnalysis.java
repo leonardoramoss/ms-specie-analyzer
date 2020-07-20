@@ -1,6 +1,7 @@
 package io.species.analyzer.domain.species;
 
 import io.species.analyzer.infrastructure.exception.SpecieValidationException;
+import io.species.analyzer.infrastructure.generator.UUIDGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class SpeciesAnalysis {
 
     private static final Pattern ALLOWED_NITROGENOUS_BASE = Pattern.compile("[ATCG]+");
     private static final String DELIMITER = "-";
+    private static final int MINIMUM_NxN_LENGTH = 3;
 
     @Id
     @Column(name = "UUID")
@@ -59,8 +61,9 @@ public class SpeciesAnalysis {
     }
 
     public static SpeciesAnalysis of(final String[] dna) {
-        if(dna != null && dna.length > 0) {
+        if(dna != null && dna.length >= MINIMUM_NxN_LENGTH) {
             checkAllowedNitrogenousBase(dna);
+            checkDNAStructure(dna);
             return new SpeciesAnalysis(null, String.join(DELIMITER, dna));
         }
         throw new SpecieValidationException(String.format("DNA sequence %s is invalid.", Arrays.toString(dna)));
@@ -71,6 +74,15 @@ public class SpeciesAnalysis {
             final Matcher matcher = ALLOWED_NITROGENOUS_BASE.matcher(dna);
             if(!matcher.matches()) {
                 throw new SpecieValidationException(String.format("DNA sequence %s in %s is not valid.", dna, Arrays.toString(dnaChain)));
+            }
+        });
+    }
+
+    private static void checkDNAStructure(final String[] dna) {
+        final var sequenceLength = dna.length;
+        Arrays.stream(dna).forEach(sequence -> {
+            if(sequenceLength != sequence.length()) {
+                throw new SpecieValidationException("There is not a NxN DNA sequence.");
             }
         });
     }
@@ -90,6 +102,16 @@ public class SpeciesAnalysis {
     public String getDna() {
         return this.dna;
     }
+
+    /**
+     *
+     * @param uuidGenerator
+     * @return
+     */
+    public SpeciesAnalysis withUUID(final UUIDGenerator<SpeciesAnalysis> uuidGenerator) {
+        return this.withUUID(uuidGenerator.generate(this));
+    }
+
     /**
      *
      * @param uuid
@@ -107,6 +129,10 @@ public class SpeciesAnalysis {
         return expectedIdentifier;
     }
 
+    /**
+     *
+     * @return
+     */
     public SpeciesIdentifier getIdentifier() {
         return identifier;
     }

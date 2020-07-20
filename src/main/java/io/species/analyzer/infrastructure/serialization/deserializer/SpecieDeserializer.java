@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.infrastructure.serialization.SerializationLabel;
 import io.species.analyzer.presentation.wrapper.SpecieWrapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SpecieDeserializer extends AbstractDeserializer<SpecieWrapper> {
 
     @Override

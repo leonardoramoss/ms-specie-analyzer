@@ -16,7 +16,7 @@ public class PrimateAnalyzer implements Analyzer {
 
     @Override
     public SpeciesAnalysis analyze(final SpeciesAnalysis speciesAnalysis) {
-        final boolean isSimian = isSimian(speciesAnalysis.getOriginalDna());
+        final var isSimian = isSimian(speciesAnalysis.getOriginalDna());
 
         if(isSimian) {
             speciesAnalysis.markIdentifiedAs(SpeciesIdentifier.SIMIAN);
@@ -33,22 +33,20 @@ public class PrimateAnalyzer implements Analyzer {
      * @return
      */
      boolean isSimian(String[] dna) {
-        final var pattern = Pattern.compile(".*(A{4}|C{4}|G{4}|T{4}).*");
 
-        final boolean hasHorizontalSequenceMatched = isSimian(dna, pattern);
+         final var pattern = Pattern.compile(".*(A{4}|C{4}|G{4}|T{4}).*");
 
+        final var hasHorizontalSequenceMatched = isSimian(dna, pattern);
         if(hasHorizontalSequenceMatched) {
             return true;
         }
 
-        final boolean hasVerticalSequenceMatched = isSimian(transposeStringArrayValues(dna), pattern);
-
+        final var hasVerticalSequenceMatched = isSimian(transposeStringArrayValues(dna), pattern);
         if(hasVerticalSequenceMatched) {
             return true;
         }
 
-         final boolean hasDiagonalSequenceMatched = isSimian(transposeStringArrayValuesToDiagonal(dna), pattern);
-         
+         final var hasDiagonalSequenceMatched = isSimian(transposeStringArrayValuesToDiagonal(dna), pattern);
          if(hasDiagonalSequenceMatched) {
              return true;
          }
