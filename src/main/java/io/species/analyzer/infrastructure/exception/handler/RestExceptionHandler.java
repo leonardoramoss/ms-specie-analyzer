@@ -1,9 +1,11 @@
 package io.species.analyzer.infrastructure.exception.handler;
 
 import io.species.analyzer.infrastructure.exception.SimianException;
+import io.species.analyzer.infrastructure.exception.SpecieAnalyzerException;
 import io.species.analyzer.infrastructure.exception.SpecieDeserializationException;
 import io.species.analyzer.infrastructure.exception.SpecieException;
 import io.species.analyzer.infrastructure.exception.SpecieValidationException;
+import io.species.analyzer.infrastructure.exception.StatsExecutorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -38,6 +40,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleException(exception);
     }
 
+    @ExceptionHandler(StatsExecutorException.class)
+    protected ResponseEntity<SpecieExceptionData> handleStatExecutorException(final StatsExecutorException exception) {
+        return handleException(exception);
+    }
+
+    @ExceptionHandler(SpecieAnalyzerException.class)
+    protected ResponseEntity<SpecieExceptionData> handleSpecieAnalyzerException(final SpecieAnalyzerException exception) {
+        return handleException(exception);
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<SpecieExceptionData> handleException(final Exception exception, final HttpServletRequest httpServletRequest) {
         final var uri = httpServletRequest.getRequestURI();
@@ -49,7 +61,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<SpecieExceptionData> handleException(final SpecieException exception) {
         final var annotation = exception.getClass().getAnnotation(ResponseStatus.class);
-        final var exceptionData = SpecieExceptionData.of(annotation, exception);
+        final var throwable = exception.getCause();
+        final var exceptionData = SpecieExceptionData.of(annotation.code(), annotation.reason(), throwable != null ? throwable.getMessage() : exception.getMessage());
         return new ResponseEntity<>(exceptionData, annotation.code());
     }
 }

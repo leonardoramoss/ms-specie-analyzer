@@ -10,7 +10,8 @@ import io.species.analyzer.domain.species.stats.StatsExecutor;
 import io.species.analyzer.domain.species.stats.StatsIdentifier;
 import io.species.analyzer.domain.species.stats.StatsResult;
 import io.species.analyzer.infrastructure.annotation.ApplicationServices;
-import io.species.analyzer.infrastructure.exception.SpecieException;
+import io.species.analyzer.infrastructure.exception.SpecieAnalyzerException;
+import io.species.analyzer.infrastructure.exception.StatsExecutorException;
 import io.species.analyzer.infrastructure.retrieve.Retriever;
 
 import java.util.EnumMap;
@@ -38,7 +39,7 @@ public class SpeciesApplicationServices {
 
     public SpeciesAnalysis analyzeSpecie(final SpeciesAnalysis speciesAnalysis) {
         final var optionalAnalyzedSpecie = retriever.retrieve(speciesAnalysis);
-        final Analyzer defaultAnalyzer = (final SpeciesAnalysis s) -> { throw new SpecieException("There are no analyzer for this specie: " + s.getIdentifier()); };
+        final Analyzer defaultAnalyzer = (final SpeciesAnalysis s) -> { throw new SpecieAnalyzerException("There are no analyzer for this specie: " + s.getIdentifier()); };
 
         return optionalAnalyzedSpecie.orElseGet(() -> {
             final var analyzer = analyzers.getOrDefault(speciesAnalysis.getExpectedIdentifier(), defaultAnalyzer);
@@ -49,7 +50,7 @@ public class SpeciesApplicationServices {
     }
 
     public StatsResult viewStats(final StatsIdentifier statsIdentifier) {
-        final StatsExecutor defaultStatsExecutor = () -> { throw new SpecieException("There are no stats executor for this identifier: " + statsIdentifier.name()); };
+        final StatsExecutor defaultStatsExecutor = () -> { throw new StatsExecutorException("There are no stats executor for this identifier: " + statsIdentifier.name()); };
         final var statsExecutor = executors.getOrDefault(statsIdentifier, defaultStatsExecutor);
         return statsExecutor.execute();
     }

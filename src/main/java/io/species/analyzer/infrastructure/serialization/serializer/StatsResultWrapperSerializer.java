@@ -11,16 +11,17 @@ import java.util.Optional;
 public class StatsResultWrapperSerializer extends AbstractSerializer<StatsResultWrapper> {
 
     @Override
-    public void serialize(final StatsResultWrapper statsResultWrapper) throws IOException {
+    public void serialize(final StatsResultWrapper statsResultWrapper, final SerializationLabel serializationLabel, final JsonWriter jsonWriter) throws IOException {
         final Optional<StatsResult> resultOptional = statsResultWrapper.getStats();
         if(resultOptional.isPresent()) {
             final var result = (StatsHumanSimianRatioResult) resultOptional.get();
-            writeStartObject();
-            writeNumberField(StatsHumanSimianRatioLabel.SIMIAN, result.getSimianCount());
-            writeNumberField(StatsHumanSimianRatioLabel.HUMAN, result.getHumanCount());
-            writeNumberField(StatsHumanSimianRatioLabel.RATIO, result.result());
-            writeEndObject();
+            jsonWriter.writeStartObject(serializationLabel);
+            jsonWriter.writeNumberField(StatsHumanSimianRatioLabel.SIMIAN, result.getSimianCount());
+            jsonWriter.writeNumberField(StatsHumanSimianRatioLabel.HUMAN, result.getHumanCount());
+            jsonWriter.writeNumberField(StatsHumanSimianRatioLabel.RATIO, result.result());
+            jsonWriter.writeEndObject();
         }
+
     }
 
     private enum StatsHumanSimianRatioLabel implements SerializationLabel {

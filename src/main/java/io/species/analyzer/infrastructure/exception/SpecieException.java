@@ -2,7 +2,7 @@ package io.species.analyzer.infrastructure.exception;
 
 public class SpecieException extends RuntimeException {
 
-    public SpecieException(final String message) {
+    protected SpecieException(final String message) {
         super((message));
     }
 }

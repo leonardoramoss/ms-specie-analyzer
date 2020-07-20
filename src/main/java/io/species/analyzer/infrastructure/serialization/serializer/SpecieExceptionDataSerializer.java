@@ -9,15 +9,15 @@ import java.time.format.DateTimeFormatter;
 public class SpecieExceptionDataSerializer extends AbstractSerializer<SpecieExceptionData> {
 
     @Override
-    public void serialize(final SpecieExceptionData value) throws IOException {
+    public void serialize(final SpecieExceptionData value, final SerializationLabel serializationLabel, final JsonWriter jsonWriter) throws IOException {
         final var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        this.writeStartObject();
-        this.writeNumberField(SpecieExceptionDataLabels.CODE, value.getHttpStatus().value());
-        this.writeStringField(SpecieExceptionDataLabels.TIMESTAMP, formatter.format(value.getTimestamp()));
-        this.writeStringField(SpecieExceptionDataLabels.CAUSE, value.getCause());
-        this.writeStringField(SpecieExceptionDataLabels.MESSAGE, value.getMessage());
-        this.writeEndObject();
+        jsonWriter.writeStartObject(serializationLabel);
+        jsonWriter.writeStringField(SpecieExceptionDataLabels.CODE, value.getHttpStatus().toString());
+        jsonWriter.writeStringField(SpecieExceptionDataLabels.TIMESTAMP, formatter.format(value.getTimestamp()));
+        jsonWriter.writeStringField(SpecieExceptionDataLabels.CAUSE, value.getCause());
+        jsonWriter.writeStringField(SpecieExceptionDataLabels.MESSAGE, value.getMessage());
+        jsonWriter.writeEndObject();
     }
 
     private enum SpecieExceptionDataLabels implements SerializationLabel {

@@ -233,9 +233,6 @@ class SpeciesAnalysisIntegrationTests extends AbstractIntegrationTests {
 
         verifyDatabaseWithQuery("expected_valid_human_and_simian_payloads.xml", SPECIES_ANALYSIS_TABLE, "SELECT * FROM " + SPECIES_ANALYSIS_TABLE + " ORDER BY UUID", "ANALYZED_AT");
         verifyDatabase("expected_species_counter.xml", SPECIES_ANALYSIS_COUNTER_TABLE);
-
-        //databaseExpectationBuilder().addExpectation(SPECIES_ANALYSIS_TABLE, ).write("expected/datasets/expected_valid_human_and_simian_payloads.xml");
-        //databaseExpectationBuilder().addExpectation(SPECIES_ANALYSIS_COUNTER_TABLE).write("expected/datasets/expected_species_counter.xml");
     }
 
     private ArrayList<JsonNode> getPayloads(final String pathMockPayloads) throws IOException {
