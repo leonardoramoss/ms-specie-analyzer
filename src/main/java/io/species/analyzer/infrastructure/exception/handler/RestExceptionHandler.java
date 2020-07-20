@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(RestExceptionHandler.class);
 
     @ExceptionHandler(SpecieValidationException.class)
     protected ResponseEntity<SpecieExceptionData> handleSpecieValidationException(final SpecieValidationException exception) {
@@ -43,7 +43,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var uri = httpServletRequest.getRequestURI();
         final var rootCause = exception.getCause();
         final var exceptionData = SpecieExceptionData.of(HttpStatus.INTERNAL_SERVER_ERROR, exception.getCause().toString(), "Opss!");
-        logger.error(String.format("URI %s - %s - Root Cause: %s", uri, exception.getMessage(), rootCause != null ? rootCause.getMessage() : ""));
+        LOG.error(String.format("URI %s - %s - Root Cause: %s", uri, exception.getMessage(), rootCause != null ? rootCause.getMessage() : ""));
         return new ResponseEntity<>(exceptionData, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

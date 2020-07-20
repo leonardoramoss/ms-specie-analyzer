@@ -1,5 +1,6 @@
 package io.species.analyzer.infrastructure;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONValue;
 import org.dbunit.DatabaseUnitException;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.xml.sax.InputSource;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -70,9 +72,22 @@ public abstract class AbstractIntegrationTests {
         }
     }
 
+    protected JsonNode getJsonNodeFromJsonFile(final String path) throws IOException {
+        final var text = getJsonFileAsString(path);
+        return getJsonNodeFromString(text);
+    }
+
+    protected JsonNode getJsonNodeFromString(final String string) throws IOException {
+        return objectMapper.readTree(string);
+    }
+
     protected void verifyDatabase(final String fileName, final String tableName, final String ... ignoredColumns) throws Exception {
         final var selectQuery = "SELECT * FROM " + tableName;
-        assertEqualsByQuery(getDataSet("/expected/datasets/" + fileName), getDatabaseConnection(), selectQuery, tableName, ignoredColumns);
+        verifyDatabaseWithQuery(fileName, tableName, selectQuery, ignoredColumns);
+    }
+
+    protected void verifyDatabaseWithQuery(final String fileName, final String tableName, final String query, final String ... ignoredColumns) throws Exception {
+        assertEqualsByQuery(getDataSet("/expected/datasets/" + fileName), getDatabaseConnection(), query, tableName, ignoredColumns);
     }
 
     private IDataSet getDataSet(final String dataset) throws DataSetException {

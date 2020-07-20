@@ -1,0 +1,245 @@
+[
+    {
+        "dna": ["ATCGCA", "TCTCCG", "TGGTTG", "CCTTTC", "GTAATC", "ACCACT"]
+    },
+    {
+        "dna": ["ATGATC", "ACAATC", "GGCCAA", "ATCGCT", "AAAATT", "TGCGGA"]
+    },
+    {
+        "dna": ["GATCGT", "AGTCGT", "ATATAC", "CCTTCC", "GCGTAG", "CGTTAC"]
+    },
+    {
+        "dna": ["CTGAGC", "GCACCT", "ACCACT", "GGCCCT", "CGCCTT", "TACGAT"]
+    },
+    {
+        "dna": ["CGGAGC", "TATAGG", "TTTTTG", "CTCGAA", "AAGCGG", "ACGACA"]
+    },
+    {
+        "dna": ["GGTAGA", "TGATCA", "AAAGTA", "CGGTTC", "AAGCTC", "TTTATC"]
+    },
+    {
+        "dna": ["GTTCTG", "ACTAAA", "GTAGAC", "GTTTGA", "AACCAC", "GAAAAC"]
+    },
+    {
+        "dna": ["GCAGTT", "CAGCCG", "AGGAGA", "TTGATG", "AGCAGA", "GTAACG"]
+    },
+    {
+        "dna": ["TGAGTG", "CCCGTG", "GAGAAC", "TAGTCC", "GTTCTT", "AAAATG"]
+    },
+    {
+        "dna": ["TACCCA", "AAACAG", "GCAGTA", "ACTCGG", "GCTGCT", "TGGGGT"]
+    },
+    {
+        "dna": ["GGCCGG", "CACCTG", "CCTGTC", "CGGGGG", "TATGGG", "TTCTCT"]
+    },
+    {
+        "dna": ["AGGATC", "AAAGTA", "TATCGC", "TAGAGC", "AAGAAA", "CGAACC"]
+    },
+    {
+        "dna": ["CTATCA", "ACGAAT", "GACGGT", "AGACGG", "CTAACA", "GCCGAT"]
+    },
+    {
+        "dna": ["GCTACC", "TAAGTC", "CATTAC", "GGCCAC", "AAAGGT", "GTCGTT"]
+    },
+    {
+        "dna": ["CCTATC", "AAATGC", "TTTGAT", "CGTATC", "CGAACA", "GACTTT"]
+    },
+    {
+        "dna": ["GTAGGC", "CGTACG", "TAAAAC", "GGGGAA", "GTCAGA", "CAGCGT"]
+    },
+    {
+        "dna": ["TGTGCA", "TAGCAG", "ATAGGT", "TAAGGG", "AGATAA", "TACAGC"]
+    },
+    {
+        "dna": ["ACGACC", "CAGGAC", "GCAGAG", "TCAGTC", "ACAGAT", "TACATT"]
+    },
+    {
+        "dna": ["CCGGGA", "TGGTGG", "GACAGT", "TGCGGT", "ATTGGT", "GCGGCA"]
+    },
+    {
+        "dna": ["TGAAGA", "TAAGGG", "CAGAGA", "CCAACC", "CATAAG", "TTTTAT"]
+    },
+    {
+        "dna": ["TATCCG", "AGATAG", "GCTTTT", "CATTCT", "CGGTCT", "AGAAAT"]
+    },
+    {
+        "dna": ["TTTTTG", "CCTTTA", "ATCTAC", "ACGGCG", "AGAGGC", "CCAGTA"]
+    },
+    {
+        "dna": ["AGTGGA", "GTCTGA", "TGTCTA", "GTCCCT", "GCAGCT", "TTGAGC"]
+    },
+    {
+        "dna": ["TCACCC", "AATATG", "ATAACT", "AGCGTC", "TGCTTG", "AGTTGT"]
+    },
+    {
+        "dna": ["GATACG", "CACAAG", "GGATGG", "CTAGTA", "GCGCGA", "TGGCGT"]
+    },
+    {
+        "dna": ["ACAGTA", "GAGCCT", "AATGCG", "CATAAG", "CATTTG", "TCTAAA"]
+    },
+    {
+        "dna": ["CCACAG", "CATGCT", "CCGGGG", "TAGAAT", "CGTCTT", "GGTCGA"]
+    },
+    {
+        "dna": ["CAGACC", "TGGGAG", "CTACAA", "GCTGAG", "AACTGT", "AATTGG"]
+    },
+    {
+        "dna": ["GTCCTT", "TGCGCG", "TGGCTC", "AAGTTA", "CATCTT", "TTTCGA"]
+    },
+    {
+        "dna": ["GCATTG", "CCGTCG", "TCGGGG", "AGCGCA", "ACATAA", "AATTGA"]
+    },
+    {
+        "dna": ["AGTGAC", "CTGCTC", "TAAAAT", "GGGGTA", "GAGTAG", "TTCGGC"]
+    },
+    {
+        "dna": ["ACCACG", "GCACAA", "AGTTTC", "AGATAG", "ATGGGT", "GACCCC"]
+    },
+    {
+        "dna": ["GATAGG", "AGGTCT", "GCTGTA", "CTGAAT", "AATTGC", "CATCGA"]
+    },
+    {
+        "dna": ["TTTACC", "ACATTG", "AGAGTA", "AATTGT", "TCAGAG", "CCGTCT"]
+    },
+    {
+        "dna": ["AGCTTC", "TTGCAT", "GTTACG", "GCTAGC", "TCCTTC", "CACACG"]
+    },
+    {
+        "dna": ["CAGCTG", "CGGTAA", "CCTTGG", "GTAGTG", "TTGACG", "ACACGC"]
+    },
+    {
+        "dna": ["AGGGCC", "ACTTAA", "CAGTCG", "ATTCTA", "ACCCCT", "ACGGCC"]
+    },
+    {
+        "dna": ["GCCAGT", "TCCCGT", "AAAACT", "GAACCG", "TATGTT", "TGCGCA"]
+    },
+    {
+        "dna": ["CGCCTT", "CTTTGG", "CGGTAG", "GCCCTA", "TGAGTT", "CCAGCG"]
+    },
+    {
+        "dna": ["CGCTAC", "TTCCAA", "GGCGAT", "GGAAGA", "GAGCGA", "CTGGTT"]
+    },
+    {
+        "dna": ["GACTCA", "CGCTTA", "TATTTT", "TCTGGC", "CAGACA", "ATCACC"]
+    },
+    {
+        "dna": ["CGGAGT", "CCTGGG", "AACTAA", "CCGCCT", "GAAGCA", "TGTGTA"]
+    },
+    {
+        "dna": ["AAAAGT", "GCTCTC", "CTGAAT", "CAATGG", "TTTAAC", "CATATG"]
+    },
+    {
+        "dna": ["AACAGA", "AAGGGG", "GGAAGC", "CGCAAG", "AAAGGG", "TCAGGT"]
+    },
+    {
+        "dna": ["GGGCTC", "CGGGCA", "ACCCAC", "TGTATT", "CGAACA", "TTCAAT"]
+    },
+    {
+        "dna": ["GAACGA", "AGCCGC", "ACGGAA", "ATCGCT", "CGAAAA", "AGACAA"]
+    },
+    {
+        "dna": ["CTAAGT", "GCATAT", "AAGACT", "GTGTCA", "TAGATA", "GAGATG"]
+    },
+    {
+        "dna": ["TGAGTG", "TTCAGC", "GACACA", "GTTTTG", "TCGTTA", "TCCAGC"]
+    },
+    {
+        "dna": ["CTGATA", "CCAAGT", "TAAAGT", "AGATCC", "GAGCTA", "ATTAGC"]
+    },
+    {
+        "dna": ["AAAAAC", "GGTGTA", "CTCTAA", "CCATGC", "TGGGGG", "TGTCGT"]
+    },
+    {
+        "dna": ["TTATTA", "CACCGG", "AGGTGT", "GTAGGA", "CGAGGT", "TGTTTC"]
+    },
+    {
+        "dna": ["CGATAC", "GATTCC", "GTTCCT", "GACCAG", "CCACGG", "GCCTGT"]
+    },
+    {
+        "dna": ["TCTGCT", "CGTGGT", "GGCAAA", "TTTTCG", "AGCCCG", "GGTTGG"]
+    },
+    {
+        "dna": ["CTCGCT", "AGTCTC", "TCGCCT", "CGCGGA", "GGTTGT", "TTGTGG"]
+    },
+    {
+        "dna": ["GTCTAG", "ATTCCG", "GACTGA", "TCACCT", "CGATTG", "AATATT"]
+    },
+    {
+        "dna": ["GCTACC", "ACCAGG", "AGGTCG", "CTTATG", "AAGGGG", "TTGACA"]
+    },
+    {
+        "dna": ["CAACTT", "AGCCTC", "TATACT", "CCATTT", "GTGTCG", "TTTCGG"]
+    },
+    {
+        "dna": ["ACCATG", "CATGTT", "TCCTAC", "GCTACA", "CGAAGT", "TAGGTG"]
+    },
+    {
+        "dna": ["TGTCTA", "ACCGAT", "TGCAAC", "GCAACT", "TCCATA", "AGAGCT"]
+    },
+    {
+        "dna": ["CCGGAT", "CTTGGT", "TTTATG", "GTTCGC", "ATCATC", "ACACCT"]
+    },
+    {
+        "dna": ["TTGGTC", "ATTAAC", "GTATCG", "TTTTAA", "GGTCTG", "ATCTCT"]
+    },
+    {
+        "dna": ["CTGTCC", "GTGGTA", "CGCCGG", "TCTTGG", "CACCCG", "TACAAT"]
+    },
+    {
+        "dna": ["TCCGTT", "CGCGAA", "AAAATT", "GAGCGC", "TCCGTC", "TCTAAA"]
+    },
+    {
+        "dna": ["AGTTTT", "TCCGTT", "AAGTCA", "TATTCG", "ACATTA", "GTTCTG"]
+    },
+    {
+        "dna": ["CTAGTC", "ATGGGA", "GTGAGA", "GAATCA", "ACAACA", "GGTGAA"]
+    },
+    {
+        "dna": ["AGGGGT", "TAAGGG", "AGGACG", "GCACGC", "ACTAAG", "GCTGAG"]
+    },
+    {
+        "dna": ["CCTCCA", "ACATTC", "CGAAGT", "CAAAAC", "CCCACG", "AGAAAC"]
+    },
+    {
+        "dna": ["CACAGA", "GGCAGG", "CAAAAG", "TCAATA", "TTTGAG", "GTTGCA"]
+    },
+    {
+        "dna": ["GCCTGC", "GCACGC", "GCAACC", "CGGAGC", "TCTCCT", "TTCATA"]
+    },
+    {
+        "dna": ["CCTCAT", "CCCACG", "CAGGGA", "TTTACA", "AATCAA", "AGATAA"]
+    },
+    {
+        "dna": ["CCTCGT", "AGGGTG", "CAGCTA", "CCACTC", "CCGTAT", "CCGGCT"]
+    },
+    {
+        "dna": ["TGGGCA", "GATTAG", "CAATTC", "TCCTAC", "CGCTAT", "CAACGC"]
+    },
+    {
+        "dna": ["CCTAAA", "TGCGGT", "TGTAAA", "GTTTAG", "TTGGGG", "CCCTAC"]
+    },
+    {
+        "dna": ["GTGACA", "CCAATC", "ACACGA", "AGTAGC", "ACAAAA", "CAAGGG"]
+    },
+    {
+        "dna": ["TAGGGT", "TTTGAT", "TGACGG", "GCGGTA", "CAGAAA", "GGCTAT"]
+    },
+    {
+        "dna": ["CCCATG", "TTACGG", "TATCTG", "CCAGGT", "AAAAAC", "GGGTCC"]
+    },
+    {
+        "dna": ["TAGCCC", "TTGGCA", "CTTTCG", "GTCCCT", "GCTAAA", "GATAGG"]
+    },
+    {
+        "dna": ["TGACTG", "TGACCG", "CTTCTT", "GGGGGT", "GGCGAG", "CCGAGA"]
+    },
+    {
+        "dna": ["TCAGTG", "AACGCG", "GTGCTG", "ACCTGG", "TCACCG", "CGCTGA"]
+    },
+    {
+        "dna": ["GGCGCC", "ACTACA", "CTCTCC", "AATACC", "GAGACG", "TGAGGA"]
+    },
+    {
+        "dna": ["ATCTTA", "GCCTAC", "ACTGAA", "GTGGGC", "ACCCTA", "GCTCTG"]
+    }
+]

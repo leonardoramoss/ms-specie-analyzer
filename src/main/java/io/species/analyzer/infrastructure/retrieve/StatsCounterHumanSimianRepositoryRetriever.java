@@ -1,6 +1,7 @@
 package io.species.analyzer.infrastructure.retrieve;
 
-import io.species.analyzer.domain.species.SpeciesAnalysisRepository;
+import io.species.analyzer.domain.species.SpecieAnalysisCounterRepository;
+import io.species.analyzer.domain.species.SpeciesAnalysisCounter;
 import io.species.analyzer.domain.species.SpeciesIdentifier;
 import org.springframework.stereotype.Component;
 
@@ -11,16 +12,17 @@ import java.util.stream.Collectors;
 @Component
 public class StatsCounterHumanSimianRepositoryRetriever implements Retriever<List<SpeciesIdentifier>, Map<SpeciesIdentifier, Long>> {
 
-    private final SpeciesAnalysisRepository speciesAnalysisRepository;
+    private final SpecieAnalysisCounterRepository specieAnalysisCounterRepository;
 
-    public StatsCounterHumanSimianRepositoryRetriever(final SpeciesAnalysisRepository speciesAnalysisRepository) {
-        this.speciesAnalysisRepository = speciesAnalysisRepository;
+    public StatsCounterHumanSimianRepositoryRetriever(final SpecieAnalysisCounterRepository specieAnalysisCounterRepository) {
+        this.specieAnalysisCounterRepository = specieAnalysisCounterRepository;
     }
 
     @Override
     public Map<SpeciesIdentifier, Long> retrieve(final List<SpeciesIdentifier> speciesIdentifiers) {
-        final var countSpeciesAnalysesByIdentifier = speciesAnalysisRepository.countSpeciesAnalysesByIdentifierIn(speciesIdentifiers);
-        return countSpeciesAnalysesByIdentifier.stream()
-                .collect(Collectors.toMap(specieIdentifier -> (SpeciesIdentifier) specieIdentifier[0], count -> (Long) count[1]));
+        final var speciesAnalysisCounters = specieAnalysisCounterRepository.findAllByIdentifierIn(speciesIdentifiers);
+        return speciesAnalysisCounters.stream()
+                .collect(Collectors.toMap(SpeciesAnalysisCounter::getIdentifier, SpeciesAnalysisCounter::getCounter));
+
     }
 }

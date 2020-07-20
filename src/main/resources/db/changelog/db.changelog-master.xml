@@ -8,5 +8,6 @@
     </preConditions>
 
     <include file="classpath:db/changelog/scripts/db.changelog-01.sql"/>
+    <include file="classpath:db/changelog/scripts/db.changelog-02.sql"/>
 
 </databaseChangeLog>
