@@ -56,7 +56,7 @@
   
 ##### Endpoint - /v1/stats
 
-- Response stats payload
+- Response stats payload example
 
     ```json
     {
@@ -73,7 +73,7 @@ The API is running at: https://species-ml.herokuapp.com
 
 ### Local
 
-#####Docker:
+####Docker:
 
 Run docker-compose on base project folder
 
@@ -87,7 +87,7 @@ Run docker-compose on base project folder
     ```
     The application will start at http://localhost:8080/
 
-#####IDE:
+####IDE:
 
 - Running only dependencies and start application by IntelliJ
     ```
