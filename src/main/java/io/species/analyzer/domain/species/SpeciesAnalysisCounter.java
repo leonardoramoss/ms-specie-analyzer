@@ -1,6 +1,5 @@
 package io.species.analyzer.domain.species;
 
-import io.species.analyzer.infrastructure.generator.UUIDGenerator;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.Column;
@@ -47,10 +46,6 @@ public class SpeciesAnalysisCounter {
 
     public SpeciesAnalysisCounter withUUID(final UUID uuid) {
         return new SpeciesAnalysisCounter(uuid, identifier, counter);
-    }
-
-    public SpeciesAnalysisCounter withUUID(final UUIDGenerator<SpeciesAnalysisCounter> uuidGenerator) {
-        return this.withUUID(uuidGenerator.generate(this));
     }
 
     public SpeciesIdentifier getIdentifier() {

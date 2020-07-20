@@ -9,10 +9,10 @@ import java.time.format.DateTimeFormatter;
 public class SpecieExceptionDataSerializer extends AbstractSerializer<SpecieExceptionData> {
 
     @Override
-    public void serialize(final SpecieExceptionData value, final SerializationLabel serializationLabel, final JsonWriter jsonWriter) throws IOException {
+    public void serialize(final SpecieExceptionData value, final JsonWriter jsonWriter) throws IOException {
         final var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        jsonWriter.writeStartObject(serializationLabel);
+        jsonWriter.writeStartObject();
         jsonWriter.writeStringField(SpecieExceptionDataLabels.CODE, value.getHttpStatus().toString());
         jsonWriter.writeStringField(SpecieExceptionDataLabels.TIMESTAMP, formatter.format(value.getTimestamp()));
         jsonWriter.writeStringField(SpecieExceptionDataLabels.CAUSE, value.getCause());

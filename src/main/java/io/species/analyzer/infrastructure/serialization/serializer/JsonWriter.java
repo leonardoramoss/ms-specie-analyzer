@@ -6,7 +6,6 @@ import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class JsonWriter {
 
@@ -16,20 +15,20 @@ public class JsonWriter {
         this.generator = generator;
     }
 
-    public void writeStartObject(final SerializationLabel serializationLabel) throws IOException {
-        if (Objects.isNull(serializationLabel) || ObjectUtils.isEmpty(serializationLabel.label())) {
-            generator.writeStartObject();
-        } else {
-            generator.writeObjectFieldStart(serializationLabel.label());
-        }
+    public void writeStartObject() throws IOException {
+        generator.writeStartObject();
     }
 
     public void writeNumberField(final SerializationLabel serializationLabel, final BigDecimal value) throws IOException {
-        generator.writeNumberField(serializationLabel.label(), value);
+        if(!ObjectUtils.isEmpty(value)) {
+            generator.writeNumberField(serializationLabel.label(), value);
+        }
     }
 
     public void writeNumberField(final SerializationLabel serializationLabel, final Long value) throws IOException {
-        generator.writeNumberField(serializationLabel.label(), value);
+        if(!ObjectUtils.isEmpty(value)) {
+            generator.writeNumberField(serializationLabel.label(), value);
+        }
     }
 
     public void writeStringField(final SerializationLabel serializationLabel, final String value) throws IOException {
