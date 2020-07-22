@@ -10,7 +10,7 @@ public class ArrayUtils {
 
     private ArrayUtils() {}
 
-    public static char[][] stringArrayToMultidimensionalChar(final String[] stringArray) {
+    public static char[][] explodeValues(final String[] stringArray) {
 
         final var N = stringArray.length;
         final var multidimensionalArray = new char[N][N];
@@ -20,6 +20,7 @@ public class ArrayUtils {
                 multidimensionalArray[i][j] = stringArray[i].toCharArray()[j];
             }
         }
+
         return multidimensionalArray;
     }
 
@@ -37,20 +38,6 @@ public class ArrayUtils {
         return builder.toString().split(DELIMITER);
     }
 
-    public static String[] transposeStringArrayValues(final String[] stringArray) {
-        final var arrayToMultidimensionalChar = stringArrayToMultidimensionalChar(stringArray);
-        final var transposeRowToColumn = transposeRowToColumn(arrayToMultidimensionalChar);
-        return multidimensionalCharToStringArray(transposeRowToColumn);
-    }
-
-    public static String[] transposeStringArrayValuesToDiagonal(final String[] dna) {
-        return diagonalMultidimensionalCharToArrayString(stringArrayToMultidimensionalChar(dna));
-    }
-
-    public static String[] reverseValuesAndTransposeStringArrayValuesToDiagonal(final String[] dna) {
-        return transposeStringArrayValuesToDiagonal(reverseStringArrayValues(dna));
-    }
-
     public static String[] reverseStringArrayValues(final String[] stringArray) {
         return Arrays.stream(stringArray)
                 .map(string -> new StringBuilder(string).reverse().toString())
@@ -62,8 +49,8 @@ public class ArrayUtils {
 
         final char[][] multidimensionalArray = new char[originalMultidimensionalChar.length][originalMultidimensionalChar[0].length];
 
-        for (var i = 0; i < originalMultidimensionalChar[0].length; i++) {
-            for (var j = 0; j < originalMultidimensionalChar.length; j++) {
+        for (var i = 0; i < originalMultidimensionalChar.length; i++) {
+            for (var j = 0; j < originalMultidimensionalChar[i].length; j++) {
                 multidimensionalArray[i][j] = originalMultidimensionalChar[j][i];
             }
         }
@@ -103,9 +90,9 @@ public class ArrayUtils {
                 }
             }
 
-            if (i != diagonalLines) {
+            if (i <= diagonalLines) {
                 output.append(items);
-                if(i != diagonalLines - 1) {
+                if(i <= diagonalLines - 1) {
                     output.append(DELIMITER);
                 }
             }

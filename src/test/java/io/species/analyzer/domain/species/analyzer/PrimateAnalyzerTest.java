@@ -1,25 +1,37 @@
 package io.species.analyzer.domain.species.analyzer;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
 class PrimateAnalyzerTest {
 
     private final PrimateAnalyzer analyzer = new PrimateAnalyzer();
+    private static final String DELIMITER = "-";
 
-    void teste() {
+    @Test
+    @Disabled
+    void payloadDNAGenerator() {
 
-        final var counter = 150;
+        final var counter = 1_000_000;
 
         for(int i = 0; i < counter; i++) {
-            int n = 6;
-            final StringBuilder stringBuilder = new StringBuilder();
-            for(int j = 1; j <= n; j++) {
-                stringBuilder.append(randomAlphaNumeric(n));
-                if(j != n) {
-                    stringBuilder.append("-");
+
+            final int N = 12;
+
+            final var stringBuilder = new StringBuilder();
+
+            for(int j = 1; j <= N; j++) {
+
+                stringBuilder.append(randomAlphaNumeric(N));
+
+                if(j != N) {
+                    stringBuilder.append(DELIMITER);
                 }
             }
-            final var dna = stringBuilder.toString().split("-");
+
+            final var dna = stringBuilder.toString().split(DELIMITER);
             final var simian = analyzer.isSimian(dna);
             System.out.println(String.format("%s - isSimian: %s", Arrays.toString(dna), simian));
         }

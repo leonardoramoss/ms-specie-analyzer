@@ -2,14 +2,11 @@ package io.species.analyzer.domain.species.analyzer;
 
 import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.domain.species.SpeciesIdentifier;
+import io.species.analyzer.domain.species.analyzer.munipulation.DnaManipulation;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
-
-import static io.species.analyzer.infrastructure.util.ArrayUtils.reverseValuesAndTransposeStringArrayValuesToDiagonal;
-import static io.species.analyzer.infrastructure.util.ArrayUtils.transposeStringArrayValues;
-import static io.species.analyzer.infrastructure.util.ArrayUtils.transposeStringArrayValuesToDiagonal;
 
 @Component
 public class PrimateAnalyzer implements Analyzer {
@@ -34,24 +31,24 @@ public class PrimateAnalyzer implements Analyzer {
      */
      boolean isSimian(String[] dna) {
 
-         final var pattern = Pattern.compile(".*(A{4}|C{4}|G{4}|T{4}).*");
+        final var pattern = Pattern.compile(".*(A{4}|C{4}|G{4}|T{4}).*");
 
         final var hasHorizontalSequenceMatched = isSimian(dna, pattern);
         if(hasHorizontalSequenceMatched) {
             return true;
         }
 
-        final var hasVerticalSequenceMatched = isSimian(transposeStringArrayValues(dna), pattern);
+        final var hasVerticalSequenceMatched = isSimian(DnaManipulation.transposeDNASequence(dna), pattern);
         if(hasVerticalSequenceMatched) {
             return true;
         }
 
-         final var hasDiagonalSequenceMatched = isSimian(transposeStringArrayValuesToDiagonal(dna), pattern);
+         final var hasDiagonalSequenceMatched = isSimian(DnaManipulation.transposeDiagonalDNASequence(dna), pattern);
          if(hasDiagonalSequenceMatched) {
              return true;
          }
 
-         return isSimian(reverseValuesAndTransposeStringArrayValuesToDiagonal(dna), pattern);
+         return isSimian(DnaManipulation.transposeReversedDiagonalDNASequence(dna), pattern);
     }
 
     private boolean isSimian(final String[] dna, final Pattern pattern) {

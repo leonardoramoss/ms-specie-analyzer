@@ -1,5 +1,6 @@
 package io.species.analyzer.infrastructure;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONValue;
@@ -15,15 +16,16 @@ import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.xml.sax.InputSource;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -35,6 +37,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.dbunit.Assertion.assertEqualsByQuery;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @DirtiesContext
 @SpringBootTest
@@ -57,8 +61,33 @@ public abstract class AbstractIntegrationTests {
         return JSONValue.parse(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8)).toString();
     }
 
-    protected String getMvcResultAsString(final MvcResult mvcResult) throws UnsupportedEncodingException {
-        return mvcResult.getResponse().getContentAsString();
+    protected String getMvcResultAsString(final MvcResult mvcResult) {
+        try {
+            return mvcResult.getResponse().getContentAsString();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected MvcResult performPostWithPayloadAndExpect(final String endpoint, final String jsonPayload, final ResultMatcher expected) {
+        try {
+            return mockMvc.perform(
+                    post(endpoint)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonPayload))
+                    .andExpect(expected)
+                    .andReturn();
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    protected MvcResult performGetAndExpect(final String endpoint, final ResultMatcher expected) {
+        try {
+            return mockMvc.perform(get(endpoint)).andExpect(expected).andReturn();
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     private IDatabaseConnection getDatabaseConnection()  {
@@ -73,28 +102,31 @@ public abstract class AbstractIntegrationTests {
     }
 
     protected JsonNode getJsonNodeFromJsonFile(final String path) {
+        return getJsonNodeFromString(getJsonFileAsString(path));
+    }
+
+    protected JsonNode getJsonNodeFromString(final String string)  {
         try {
-            final var text = getJsonFileAsString(path);
-            return getJsonNodeFromString(text);
-        } catch (IOException e) {
+            return objectMapper.readTree(string);
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected JsonNode getJsonNodeFromString(final String string) throws IOException {
-        return objectMapper.readTree(string);
-    }
-
-    protected void verifyDatabase(final String fileName, final String tableName, final String ... ignoredColumns) throws Exception {
+    protected void verifyDatabase(final String fileName, final String tableName, final String ... ignoredColumns) {
         final var selectQuery = "SELECT * FROM " + tableName;
         verifyDatabaseWithQuery(fileName, tableName, selectQuery, ignoredColumns);
     }
 
-    protected void verifyDatabaseWithQuery(final String fileName, final String tableName, final String query, final String ... ignoredColumns) throws Exception {
-        assertEqualsByQuery(getDataSet("/expected/datasets/" + fileName), getDatabaseConnection(), query, tableName, ignoredColumns);
+    protected void verifyDatabaseWithQuery(final String fileName, final String tableName, final String query, final String ... ignoredColumns) {
+        try {
+            assertEqualsByQuery(getDataSet("/expected/datasets/" + fileName), getDatabaseConnection(), query, tableName, ignoredColumns);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
-    private IDataSet getDataSet(final String dataset) throws DataSetException {
+    private IDataSet getDataSet(final String dataset)  {
         try {
             final var source = new InputSource(getClass().getResourceAsStream(dataset));
             final var producer = new FlatXmlProducer(source, false, true);
@@ -104,7 +136,7 @@ public abstract class AbstractIntegrationTests {
 
             return dataSet;
         } catch (final DataSetException exception) {
-            throw new DataSetException("Cannot read the dataset file " + dataset + "!", exception);
+            throw new RuntimeException("Cannot read the dataset file " + dataset + "!", exception);
         }
     }
 
