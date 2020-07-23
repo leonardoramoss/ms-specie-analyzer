@@ -1,9 +1,13 @@
 package io.species.analyzer;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.species.analyzer.application.SpeciesApplicationServices;
+import io.species.analyzer.domain.species.SpeciesAnalysis;
 import io.species.analyzer.domain.species.SpeciesAnalysisRepository;
 import io.species.analyzer.domain.species.SpeciesIdentifier;
 import io.species.analyzer.infrastructure.AbstractIntegrationTests;
+import io.species.analyzer.infrastructure.exception.SpecieAnalyzerException;
+import io.species.analyzer.infrastructure.serialization.deserializer.SpeciesAnalysisWrapperDeserializer;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +36,12 @@ class SpeciesAnalysisIntegrationTests extends AbstractIntegrationTests {
 
     @Autowired
     private SpeciesAnalysisRepository speciesAnalysisRepository;
+
+    @Autowired
+    private SpeciesApplicationServices speciesApplicationServices;
+
+    @Autowired
+    private SpeciesAnalysisWrapperDeserializer speciesAnalysisWrapperDeserializer;
 
     @Test
     @SqlGroup({
@@ -197,6 +208,21 @@ class SpeciesAnalysisIntegrationTests extends AbstractIntegrationTests {
 
         final var mvcResult = performGetAndExpect("/v1/stats", status().isOk());
         assertEquals(getJsonFileAsString("expected/response/stats/fullflow/expected_fullflow_stats.json"), getMvcResultAsString(mvcResult), true);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    })
+    void GivenANotAnalyzerConfigured_whenPerformAnalyzeSpecie_shouldBeThrowsSpecieAnalyzerException() {
+        final var speciesAnalysisWrapper = speciesAnalysisWrapperDeserializer.deserialize(getJsonNodeFromJsonFile("mock/mock_simian_horizontal_payload.json"));
+        final SpeciesAnalysis speciesAnalysis = speciesAnalysisWrapper.getSpecie().get();
+
+        assertThrows(SpecieAnalyzerException.class, () -> speciesApplicationServices.analyzeSpecie(speciesAnalysis.markExpectedIdentifierAs(SpeciesIdentifier.HUMAN)));
+
+        verifyDatabase("expected_invalid_specie.xml", SPECIES_ANALYSIS_TABLE);
+        verifyDatabase("expected_empty_counter.xml", SPECIES_ANALYSIS_COUNTER_TABLE);
     }
 
     private List<JsonNode> getPayloads(final String ... pathsMockPayloads) {

@@ -18,13 +18,15 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Objects.requireNonNullElse;
+
 @Entity
 @Table(schema = "SPECIE", name = "SPECIES_ANALYSIS")
 public class SpeciesAnalysis {
 
     private static final Pattern ALLOWED_NITROGENOUS_BASE = Pattern.compile("[ATCG]+");
     private static final String DELIMITER = "-";
-    private static final int MINIMUM_NxN_LENGTH = 3;
+    private static final int MINIMUM_NxN_LENGTH = 4;
 
     @Id
     @Column(name = "UUID")
@@ -87,6 +89,10 @@ public class SpeciesAnalysis {
         });
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     /**
      *
      * @return
@@ -126,7 +132,7 @@ public class SpeciesAnalysis {
      * @return
      */
     public SpeciesIdentifier getExpectedIdentifier() {
-        return expectedIdentifier;
+        return requireNonNullElse(expectedIdentifier, SpeciesIdentifier.NOT_IDENTIFIED);
     }
 
     /**

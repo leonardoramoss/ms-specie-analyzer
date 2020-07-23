@@ -9,8 +9,8 @@ import java.util.UUID;
 public class SpecieAnalysisCounterUUIDGenerator implements UUIDGenerator<SpeciesAnalysisCounter> {
 
     @Override
-    public UUID generate(final SpeciesAnalysisCounter argument) {
-        final var identifier = argument.getIdentifier().toString();
+    public UUID generate(final SpeciesAnalysisCounter analysisCounter) {
+        final var identifier = analysisCounter.getIdentifier().toString();
         return UUID.nameUUIDFromBytes(identifier.getBytes());
     }
 }

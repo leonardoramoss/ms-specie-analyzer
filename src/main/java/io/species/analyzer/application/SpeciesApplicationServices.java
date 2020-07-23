@@ -39,7 +39,7 @@ public class SpeciesApplicationServices {
 
     public SpeciesAnalysis analyzeSpecie(final SpeciesAnalysis speciesAnalysis) {
         final var optionalAnalyzedSpecie = retriever.retrieve(speciesAnalysis);
-        final Analyzer defaultAnalyzer = (final SpeciesAnalysis s) -> { throw new SpecieAnalyzerException("There are no analyzer for this specie: " + s.getIdentifier()); };
+        final Analyzer defaultAnalyzer = (final SpeciesAnalysis s) -> { throw new SpecieAnalyzerException("There are no analyzer for this specie: " + s.getExpectedIdentifier()); };
 
         return optionalAnalyzedSpecie.orElseGet(() -> {
             final var analyzer = analyzers.getOrDefault(speciesAnalysis.getExpectedIdentifier(), defaultAnalyzer);
@@ -50,7 +50,7 @@ public class SpeciesApplicationServices {
     }
 
     public StatsResult viewStats(final StatsIdentifier statsIdentifier) {
-        final StatsExecutor defaultStatsExecutor = () -> { throw new StatsExecutorException("There are no stats executor for this identifier: " + statsIdentifier.name()); };
+        final StatsExecutor defaultStatsExecutor = () -> { throw new StatsExecutorException("There are no stats executor configured: " + statsIdentifier.name()); };
         final var statsExecutor = executors.getOrDefault(statsIdentifier, defaultStatsExecutor);
         return statsExecutor.execute();
     }

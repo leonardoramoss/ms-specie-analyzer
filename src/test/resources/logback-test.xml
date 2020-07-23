@@ -19,10 +19,6 @@
     </root>
 
     <logger name="org.dbunit.dataset.AbstractTableMetaData" level="OFF"/>
+    <property name="eclipselink.logging.level" value="OFF" />
 
-    <springProfile name="test">
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
 </configuration>

@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 @Configuration
 @EnableTransactionManagement
@@ -50,6 +51,7 @@ public class DatabaseConfiguration extends JpaBaseConfiguration {
         vendorProperties.put(PersistenceUnitProperties.PERSISTENCE_CONTEXT_FLUSH_MODE, "commit");
         vendorProperties.put(PersistenceUnitProperties.PERSISTENCE_CONTEXT_CLOSE_ON_COMMIT, TRUE);
         vendorProperties.put(PersistenceUnitProperties.PERSISTENCE_CONTEXT_PERSIST_ON_COMMIT, FALSE);
+        vendorProperties.put(PersistenceUnitProperties.LOGGING_LEVEL, Level.SEVERE.getName());
 
         return Collections.unmodifiableMap(vendorProperties);
     }

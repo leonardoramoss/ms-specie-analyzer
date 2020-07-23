@@ -1,9 +1,5 @@
 package io.species.analyzer.infrastructure;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONValue;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -13,6 +9,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.junit.FixMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,9 +23,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.xml.sax.InputSource;
 
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +32,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.dbunit.Assertion.assertEqualsByQuery;
+import static org.junit.runners.MethodSorters.JVM;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -44,9 +40,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @ActiveProfiles({"test"})
 @AutoConfigureMockMvc
-public abstract class AbstractIntegrationTests {
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
+@FixMethodOrder(JVM)
+public abstract class AbstractIntegrationTests extends AbstractTests {
 
     @Autowired
     protected MockMvc mockMvc;
@@ -55,11 +50,6 @@ public abstract class AbstractIntegrationTests {
     private JdbcTemplate jdbcTemplate;
 
     private IDatabaseConnection databaseConnection;
-
-    protected String getJsonFileAsString(final String path) {
-        final var resourceAsStream = this.getClass().getResourceAsStream(String.format("/%s", path));
-        return JSONValue.parse(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8)).toString();
-    }
 
     protected String getMvcResultAsString(final MvcResult mvcResult) {
         try {
@@ -98,18 +88,6 @@ public abstract class AbstractIntegrationTests {
             return this.databaseConnection;
         } catch (DatabaseUnitException | SQLException e) {
             throw new RuntimeException(e.getCause());
-        }
-    }
-
-    protected JsonNode getJsonNodeFromJsonFile(final String path) {
-        return getJsonNodeFromString(getJsonFileAsString(path));
-    }
-
-    protected JsonNode getJsonNodeFromString(final String string)  {
-        try {
-            return objectMapper.readTree(string);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
     }
 
