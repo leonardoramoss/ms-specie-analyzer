@@ -1,6 +1,5 @@
 package io.species.analyzer.domain.species;
 
-import io.species.analyzer.infrastructure.AbstractTests;
 import io.species.analyzer.infrastructure.exception.SpecieValidationException;
 import io.species.analyzer.infrastructure.generator.DnaSpecieUUIDGenerator;
 import io.species.analyzer.infrastructure.generator.UUIDGenerator;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SpecieAnalysisTests extends AbstractTests {
+class SpecieAnalysisTests {
 
     final UUIDGenerator<SpeciesAnalysis> generator = new DnaSpecieUUIDGenerator();
 
@@ -103,7 +102,7 @@ class SpecieAnalysisTests extends AbstractTests {
     void GivenNullDNA_shouldBeThrowSpecieValidationException() {
         final var exception = assertThrows(SpecieValidationException.class,
                 () -> SpeciesAnalysis.of(null));
-        assertEquals(String.format(EXCEPTION_MESSAGE_DNA_NOT_VALID, null), exception.getMessage());
+        assertEquals(String.format(EXCEPTION_MESSAGE_DNA_NOT_VALID, "null"), exception.getMessage());
     }
 
     @Test
