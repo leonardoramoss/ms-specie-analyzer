@@ -1,9 +1,13 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'org.springframework.boot' version '2.3.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
     id 'idea'
 }
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -13,17 +17,22 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', 'Hoxton.SR8')
+    set('springInstrumentVersion', '5.2.10.RELEASE')
+}
+
+springBoot {
+    buildInfo()
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
     }
-
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
 
     implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
@@ -35,11 +44,23 @@ dependencies {
     implementation 'org.postgresql:postgresql'
     implementation 'org.liquibase:liquibase-core'
 
+    implementation 'org.aspectj:aspectjweaver'
+    implementation "org.springframework:spring-instrument:${springInstrumentVersion}"
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     testImplementation 'com.h2database:h2'
     testImplementation 'org.dbunit:dbunit:2.7.0'
     testImplementation 'org.awaitility:awaitility:4.0.3'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 test {

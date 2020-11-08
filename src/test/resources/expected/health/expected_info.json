@@ -1,0 +1,10 @@
+{
+    "application":{
+        "name":"specie-analyzer"
+    },
+    "java":{
+        "vendor":"Oracle Corporation",
+        "vm-name":"OpenJDK 64-Bit Server VM",
+        "runtime-version":"11.0.9+11"
+    }
+}

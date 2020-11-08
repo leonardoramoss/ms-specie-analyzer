@@ -1,14 +1,17 @@
 package io.species.analyzer.domain.species.analyzer;
 
-import io.species.analyzer.domain.species.SpeciesAnalysis;
+import io.species.analyzer.domain.species.Specie;
+import io.species.analyzer.domain.species.SpecieAnalysis;
+
+import java.util.Optional;
 
 @FunctionalInterface
 public interface Analyzer {
 
     /**
      *
-     * @param speciesAnalysis
+     * @param specieAnalysis
      * @return
      */
-    SpeciesAnalysis analyze(final SpeciesAnalysis speciesAnalysis);
+    Optional<Specie> analyze(final SpecieAnalysis specieAnalysis);
 }

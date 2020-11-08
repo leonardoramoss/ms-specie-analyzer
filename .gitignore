@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.gradle
 
 ### IntelliJ IDEA ###
 .idea
@@ -25,6 +26,7 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
+.gradle/**
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/

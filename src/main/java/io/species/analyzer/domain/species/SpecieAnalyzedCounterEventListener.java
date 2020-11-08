@@ -10,10 +10,10 @@ import java.util.concurrent.ExecutorService;
 @Component
 public class SpecieAnalyzedCounterEventListener implements EventListener<SpecieAnalyzedEvent> {
 
-    private final Command<SpeciesAnalysis> incrementSpecieAnalyzedCounterCommand;
+    private final Command<SpecieAnalysis> incrementSpecieAnalyzedCounterCommand;
     private final ExecutorService executorService;
 
-    public SpecieAnalyzedCounterEventListener(final Command<SpeciesAnalysis> incrementSpecieAnalyzedCounterCommand,
+    public SpecieAnalyzedCounterEventListener(final Command<SpecieAnalysis> incrementSpecieAnalyzedCounterCommand,
                                               final ExecutorService executorService) {
         this.incrementSpecieAnalyzedCounterCommand = incrementSpecieAnalyzedCounterCommand;
         this.executorService = executorService;

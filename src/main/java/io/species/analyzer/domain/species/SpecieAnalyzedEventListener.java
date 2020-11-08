@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 public class SpecieAnalyzedEventListener implements EventListener<SpecieAnalyzedEvent> {
 
     private final SpeciesAnalysisRepository analysisRepository;
-    private final UUIDGenerator<SpeciesAnalysis> uuidGenerator;
+    private final UUIDGenerator<SpecieAnalysis> uuidGenerator;
 
     public SpecieAnalyzedEventListener(final SpeciesAnalysisRepository analysisRepository,
-                                       final UUIDGenerator<SpeciesAnalysis> uuidGenerator) {
+                                       final UUIDGenerator<SpecieAnalysis> uuidGenerator) {
         this.analysisRepository = analysisRepository;
         this.uuidGenerator = uuidGenerator;
     }

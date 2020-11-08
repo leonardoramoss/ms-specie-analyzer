@@ -4,12 +4,14 @@ import io.species.analyzer.domain.event.EventListener;
 import io.species.analyzer.domain.event.EventType;
 import io.species.analyzer.domain.species.SpecieAnalyzedCounterEventListener;
 import io.species.analyzer.domain.species.SpecieAnalyzedEventListener;
-import io.species.analyzer.domain.species.SpeciesIdentifier;
 import io.species.analyzer.domain.species.analyzer.Analyzer;
-import io.species.analyzer.domain.species.analyzer.PrimateAnalyzer;
+import io.species.analyzer.domain.species.analyzer.SimianAnalyzer;
+import io.species.analyzer.domain.species.Specie;
 import io.species.analyzer.domain.species.stats.StatsExecutor;
 import io.species.analyzer.domain.species.stats.StatsHumanSimianRatioExecutor;
 import io.species.analyzer.domain.species.stats.StatsIdentifier;
+import io.species.analyzer.infrastructure.auditing.filter.AuditableRequestFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,8 +32,8 @@ public class ContextConfiguration {
     }
 
     @Bean
-    public Map<SpeciesIdentifier, Analyzer> analyzers(final PrimateAnalyzer primateAnalyzer) {
-        return Map.of(SpeciesIdentifier.SIMIAN, primateAnalyzer);
+    public Map<Specie, Analyzer> analyzers(final SimianAnalyzer simianAnalyzer) {
+        return Map.of(Specie.SIMIAN, simianAnalyzer);
     }
 
     @Bean
@@ -43,5 +45,12 @@ public class ContextConfiguration {
     public Map<EventType, List<EventListener>> listeners(final SpecieAnalyzedEventListener specieAnalyzedEventListener,
                                                          final SpecieAnalyzedCounterEventListener specieAnalyzedCounterEventListener) {
         return Map.of(EventType.SPECIE_ANALYZED, Arrays.asList(specieAnalyzedEventListener, specieAnalyzedCounterEventListener));
+    }
+
+    @Bean
+    public FilterRegistrationBean<AuditableRequestFilter> logFilter(final AuditableRequestFilter auditableRequestFilter) {
+        final var registrationBean = new FilterRegistrationBean<AuditableRequestFilter>();
+        registrationBean.setFilter(auditableRequestFilter);
+        return registrationBean;
     }
 }

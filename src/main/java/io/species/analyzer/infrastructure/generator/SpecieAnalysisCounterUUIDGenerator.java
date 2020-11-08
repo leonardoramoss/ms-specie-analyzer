@@ -10,7 +10,7 @@ public class SpecieAnalysisCounterUUIDGenerator implements UUIDGenerator<Species
 
     @Override
     public UUID generate(final SpeciesAnalysisCounter analysisCounter) {
-        final var identifier = analysisCounter.getIdentifier().toString();
+        final var identifier = analysisCounter.getSpecie().toString();
         return UUID.nameUUIDFromBytes(identifier.getBytes());
     }
 }

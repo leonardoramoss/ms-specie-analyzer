@@ -1,7 +1,7 @@
 package io.species.analyzer.domain.species.stats;
 
-import io.species.analyzer.domain.species.SpeciesIdentifier;
-import io.species.analyzer.infrastructure.retrieve.Retriever;
+import io.species.analyzer.domain.species.Specie;
+import io.species.analyzer.infrastructure.retrieve.Fetcher;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -13,19 +13,19 @@ import java.util.Map;
 @Component
 public class StatsHumanSimianRatioExecutor implements StatsExecutor<StatsHumanSimianRatioResult> {
 
-    private final Retriever<List<SpeciesIdentifier>, Map<SpeciesIdentifier, Long>> retriever;
+    private final Fetcher<List<Specie>, Map<Specie, Long>> fetcher;
 
-    public StatsHumanSimianRatioExecutor(final Retriever<List<SpeciesIdentifier>, Map<SpeciesIdentifier, Long>> retriever) {
-        this.retriever = retriever;
+    public StatsHumanSimianRatioExecutor(final Fetcher<List<Specie>, Map<Specie, Long>> fetcher) {
+        this.fetcher = fetcher;
     }
 
     @Override
     public StatsHumanSimianRatioResult execute() {
 
-        final var speciesCount = this.retriever.retrieve(Arrays.asList(SpeciesIdentifier.HUMAN, SpeciesIdentifier.SIMIAN));
+        final var speciesCount = this.fetcher.fetch(Arrays.asList(Specie.HUMAN, Specie.SIMIAN));
 
-        final var simianCount = speciesCount.getOrDefault(SpeciesIdentifier.SIMIAN, 0L);
-        final var humanCount = speciesCount.getOrDefault(SpeciesIdentifier.HUMAN, 0L);
+        final var simianCount = speciesCount.getOrDefault(Specie.SIMIAN, 0L);
+        final var humanCount = speciesCount.getOrDefault(Specie.HUMAN, 0L);
 
         var ratio = BigDecimal.ZERO;
         if (humanCount == 0L) {

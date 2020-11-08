@@ -10,10 +10,10 @@ import java.util.UUID;
 
 public interface SpecieAnalysisCounterRepository extends JpaRepository<SpeciesAnalysisCounter, UUID> {
 
-    List<SpeciesAnalysisCounter> findAllByIdentifierIn(final List<SpeciesIdentifier> identifiers);
+    List<SpeciesAnalysisCounter> findAllBySpecieIn(final List<Specie> identifiers);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE SpeciesAnalysisCounter s SET s.counter = s.counter + 1 WHERE s.identifier = ?1")
-    int incrementSpecieCounter(final SpeciesIdentifier speciesIdentifier);
+    @Query(value = "UPDATE SpeciesAnalysisCounter s SET s.counter = s.counter + 1 WHERE s.specie = ?1")
+    int incrementSpecieCounter(final Specie specie);
 }

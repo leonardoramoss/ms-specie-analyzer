@@ -1,11 +1,6 @@
 package io.species.analyzer.infrastructure.exception.handler;
 
-import io.species.analyzer.infrastructure.exception.SimianException;
-import io.species.analyzer.infrastructure.exception.SpecieAnalyzerException;
-import io.species.analyzer.infrastructure.exception.SpecieDeserializationException;
-import io.species.analyzer.infrastructure.exception.SpecieException;
-import io.species.analyzer.infrastructure.exception.SpecieValidationException;
-import io.species.analyzer.infrastructure.exception.StatsExecutorException;
+import io.species.analyzer.infrastructure.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -35,8 +30,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleException(exception);
     }
 
-    @ExceptionHandler(SimianException.class)
-    protected ResponseEntity<SpecieExceptionData> handleSimianException(final SimianException exception) {
+    @ExceptionHandler(SpecieNotFoundException.class)
+    protected ResponseEntity<SpecieExceptionData> handleSpecieNotFoundException(final SpecieNotFoundException exception) {
         return handleException(exception);
     }
 

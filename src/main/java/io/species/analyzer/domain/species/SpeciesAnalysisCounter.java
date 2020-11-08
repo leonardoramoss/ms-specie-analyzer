@@ -19,42 +19,42 @@ public class SpeciesAnalysisCounter {
     @Column(name = "UUID")
     private final UUID uuid;
 
-    @NonNull
     @Column(name = "SPECIE")
     @Enumerated(EnumType.STRING)
-    private final SpeciesIdentifier identifier;
+    private final Specie specie;
 
     @Column(name = "COUNTER")
-    private Long counter;
+    private final Long counter;
 
     private SpeciesAnalysisCounter() {
         this(null, null, null);
     }
 
-    private SpeciesAnalysisCounter(final UUID uuid, final SpeciesIdentifier identifier, final Long counter) {
+    private SpeciesAnalysisCounter(final UUID uuid, final Specie specie, final Long counter) {
         this.uuid = uuid;
-        this.identifier = identifier;
+        this.specie = specie;
         this.counter = counter;
     }
 
-    private SpeciesAnalysisCounter(final UUID uuid, final SpeciesIdentifier identifier) {
+    private SpeciesAnalysisCounter(final UUID uuid, final Specie identifier) {
         this(uuid, identifier, 1L);
     }
 
-    public static SpeciesAnalysisCounter of(final SpeciesIdentifier identifier) {
-        return new SpeciesAnalysisCounter(null, identifier);
+    public static SpeciesAnalysisCounter of(final Specie specie) {
+        return new SpeciesAnalysisCounter(null, specie);
     }
 
     public SpeciesAnalysisCounter withUUID(final UUID uuid) {
-        return new SpeciesAnalysisCounter(uuid, identifier, counter);
+        return new SpeciesAnalysisCounter(uuid, specie, counter);
     }
 
     public SpeciesAnalysisCounter withUUID(final UUIDGenerator<SpeciesAnalysisCounter> uuidGenerator) {
         return this.withUUID(uuidGenerator.generate(this));
     }
 
-    public SpeciesIdentifier getIdentifier() {
-        return identifier;
+    @NonNull
+    public Specie getSpecie() {
+        return specie;
     }
 
     public Long getCounter() {

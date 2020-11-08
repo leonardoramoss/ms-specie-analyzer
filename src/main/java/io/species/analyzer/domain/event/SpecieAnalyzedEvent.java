@@ -1,8 +1,8 @@
 package io.species.analyzer.domain.event;
 
-import io.species.analyzer.domain.species.SpeciesAnalysis;
+import io.species.analyzer.domain.species.SpecieAnalysis;
 
-public class SpecieAnalyzedEvent extends DomainEvent<SpeciesAnalysis> {
+public class SpecieAnalyzedEvent extends DomainEvent<SpecieAnalysis> {
 
     /**
      * Constructs a prototypical Event.
@@ -10,7 +10,7 @@ public class SpecieAnalyzedEvent extends DomainEvent<SpeciesAnalysis> {
      * @param source the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    private SpecieAnalyzedEvent(final SpeciesAnalysis source) {
+    private SpecieAnalyzedEvent(final SpecieAnalysis source) {
         super(source);
     }
 
@@ -19,7 +19,7 @@ public class SpecieAnalyzedEvent extends DomainEvent<SpeciesAnalysis> {
         return EventType.SPECIE_ANALYZED;
     }
 
-    public static SpecieAnalyzedEvent of(final SpeciesAnalysis speciesAnalysis) {
-        return new SpecieAnalyzedEvent(speciesAnalysis);
+    public static SpecieAnalyzedEvent of(final SpecieAnalysis specieAnalysis) {
+        return new SpecieAnalyzedEvent(specieAnalysis);
     }
 }

@@ -1,0 +1,25 @@
+{
+    "status": "UP",
+    "components": {
+        "db": {
+            "status": "UP",
+            "details": {
+                "database": "H2",
+                "validationQuery": "isValid()"
+            }
+        },
+        "livenessState": {
+            "status": "UP"
+        },
+        "ping": {
+            "status": "UP"
+        },
+        "readinessState": {
+            "status": "UP"
+        }
+    },
+    "groups": [
+        "liveness",
+        "readiness"
+    ]
+}

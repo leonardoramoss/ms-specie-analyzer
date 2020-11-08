@@ -1,16 +1,14 @@
 package io.species.analyzer.presentation.rest;
 
 import io.species.analyzer.application.SpeciesApplicationServices;
-import io.species.analyzer.domain.species.SpeciesAnalysis;
-import io.species.analyzer.domain.species.SpeciesIdentifier;
-import io.species.analyzer.infrastructure.exception.SimianException;
-import io.species.analyzer.presentation.wrapper.SpeciesAnalysisWrapper;
+import io.species.analyzer.presentation.wrapper.SpecieAnalysisWrapper;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1")
@@ -22,11 +20,9 @@ public class SpecieAnalysisController {
         this.speciesApplicationServices = speciesApplicationServices;
     }
 
-    @RequestMapping(value = "/simian", method = RequestMethod.POST)
-    public void simian(@RequestBody final SpeciesAnalysisWrapper speciesAnalysisWrapper) {
-        final Optional<SpeciesAnalysis> optionalSpecie = speciesAnalysisWrapper.getSpecie();
-        optionalSpecie.map(specie -> speciesApplicationServices.analyzeSpecie(specie.markExpectedIdentifierAs(SpeciesIdentifier.SIMIAN)))
-                .filter(SpeciesAnalysis::isIdentifierMatchesAsExpected)
-                .orElseThrow(() -> new SimianException("Is not a simian"));
+    @RequestMapping(value = "/analyze/{specie}", method = RequestMethod.POST)
+    public void analyze(@RequestBody final SpecieAnalysisWrapper specieAnalysisWrapper, @PathVariable("specie") final String specie) {
+        specieAnalysisWrapper.getSpecie()
+                .map(it -> speciesApplicationServices.analyzeSpecie(it.expectedSpecieAs(specie)));
     }
 }

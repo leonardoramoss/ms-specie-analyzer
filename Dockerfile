@@ -1,20 +1,21 @@
-FROM maven:3.6.3-jdk-11-slim AS build
-WORKDIR /build
+FROM gradle:6.6.1-jdk11-openj9 AS build
+WORKDIR /cache
 
-COPY pom.xml .
+COPY build.gradle .
+COPY settings.gradle .
 
-RUN mvn dependency:go-offline
+RUN gradle --no-daemon dependencies --refresh-dependencies
 
-COPY ./src /build/src
+COPY ./src /cache/src
 
-RUN mvn clean package --batch-mode
+RUN gradle --no-daemon clean build
 
 #
 # RELEASE image
 #
 FROM adoptopenjdk/openjdk11:jre-11.0.4_11-alpine AS release
 
-COPY --from=build /build/target/*.jar /service.jar
+COPY --from=build /cache/build/libs/*.jar /service.jar
 
 COPY docker-entrypoint.sh /
 RUN apk add --no-cache curl && \
