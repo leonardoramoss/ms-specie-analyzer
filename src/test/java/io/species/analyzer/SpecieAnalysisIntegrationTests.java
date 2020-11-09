@@ -1,15 +1,11 @@
 package io.species.analyzer;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.species.analyzer.application.SpeciesApplicationServices;
 import io.species.analyzer.configuration.fixtures.DatabaseAssertion;
 import io.species.analyzer.configuration.fixtures.DatabaseFixture;
-import io.species.analyzer.domain.species.SpeciesAnalysisRepository;
 import io.species.analyzer.domain.species.Specie;
 import io.species.analyzer.infrastructure.exception.SpecieAnalyzerException;
 import io.species.analyzer.infrastructure.serialization.deserializer.SpeciesAnalysisWrapperDeserializer;
-import org.hamcrest.Matchers;
-import org.json.JSONException;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,23 +20,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static io.species.analyzer.configuration.fixtures.JsonFixture.loadJsonFile;
 import static io.species.analyzer.configuration.fixtures.JsonFixture.loadJsonFileAsJsonNode;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,9 +40,6 @@ class SpecieAnalysisIntegrationTests implements DatabaseAssertion {
 
     @Autowired
     protected MockMvc mockMvc;
-
-    @Autowired
-    private SpeciesAnalysisRepository speciesAnalysisRepository;
 
     @Autowired
     private SpeciesApplicationServices speciesApplicationServices;
@@ -155,36 +136,6 @@ class SpecieAnalysisIntegrationTests implements DatabaseAssertion {
             @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
-    void GivenBatchOfValidPayloads_whenPerformPost_shouldBeReturnStatusOkForSimiansAndForbiddenForHuman() throws JSONException, UnsupportedEncodingException {
-        final var expectations = Map.of(Specie.HUMAN, status().isForbidden(), Specie.SIMIAN, status().isOk());
-        final var mockPayloads = getPayloads("mock/mock_simian_payloads.json", "mock/mock_human_payloads.json");
-
-        mockPayloads.parallelStream()
-            .forEach(mockPayload -> {
-                final var speciesIdentifier = Specie.valueOf(mockPayload.get("species").asText());
-                final var jsonPayload = mockPayload.get("payload");
-                performPostWithPayloadAndExpect(SIMIAN_ENDPOINT, jsonPayload.toString(), expectations.get(speciesIdentifier));
-            });
-
-        await().pollInterval(200, TimeUnit.MILLISECONDS)
-                .timeout(500, TimeUnit.MILLISECONDS)
-                .until(() -> speciesAnalysisRepository.count(), Matchers.equalTo(150L));
-
-        final var querySpeciesAnalysis = "SELECT * FROM " + SPECIES_ANALYSIS_TABLE + " ORDER BY UUID";
-        final var querySpeciesAnalysisCounter = "SELECT * FROM " + SPECIES_ANALYSIS_COUNTER_TABLE + " ORDER BY SPECIE";
-
-        verifyDatabase("fullflow/expected_valid_human_and_simian_payloads.xml", SPECIES_ANALYSIS_TABLE, querySpeciesAnalysis, "ANALYZED_AT");
-        verifyDatabase("fullflow/expected_species_counter.xml", SPECIES_ANALYSIS_COUNTER_TABLE, querySpeciesAnalysisCounter);
-
-        final var mvcResult = performGetAndExpect("/v1/stats", status().isOk());
-        assertEquals(loadJsonFile("expected/response/stats/fullflow/expected_fullflow_stats.json"), mvcResult.getResponse().getContentAsString(), true);
-    }
-
-    @Test
-    @SqlGroup({
-            @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-            @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    })
     void GivenANotAnalyzerConfigured_whenPerformAnalyzeSpecie_shouldBeThrowsSpecieAnalyzerException() {
         final var speciesAnalysisWrapper = speciesAnalysisWrapperDeserializer.deserialize(loadJsonFileAsJsonNode("mock/mock_simian_horizontal_payload.json"));
         speciesAnalysisWrapper.getSpecie().ifPresent(it -> {
@@ -207,14 +158,6 @@ class SpecieAnalysisIntegrationTests implements DatabaseAssertion {
         verifyDatabase("expected_empty_counter.xml", SPECIES_ANALYSIS_COUNTER_TABLE, null);
     }
 
-    protected MvcResult performGetAndExpect(final String endpoint, final ResultMatcher expected) {
-        try {
-            return mockMvc.perform(get(endpoint)).andExpect(expected).andReturn();
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
     protected void performPostWithPayloadAndExpect(final String endpoint, final String jsonPayload, final ResultMatcher expected) {
         try {
             mockMvc.perform(
@@ -226,12 +169,5 @@ class SpecieAnalysisIntegrationTests implements DatabaseAssertion {
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    private List<JsonNode> getPayloads(final String ... pathsMockPayloads) {
-        return Arrays.stream(pathsMockPayloads)
-                .map(file -> loadJsonFileAsJsonNode(file))
-                .flatMap(payload -> StreamSupport.stream(payload.spliterator(), false))
-                .collect(Collectors.toList());
     }
 }

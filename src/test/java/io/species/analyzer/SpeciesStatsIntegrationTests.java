@@ -30,8 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @FixMethodOrder(MethodSorters.JVM)
 class SpeciesStatsIntegrationTests {
 
-
-
     @Autowired
     protected MockMvc mockMvc;
 
@@ -47,7 +45,7 @@ class SpeciesStatsIntegrationTests {
             @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void GivenPreviousSpeciesAnalyzed_whenPerformGetStats_shouldBeReturnRatioStatsAndStatusOk() throws Exception {
-        final var mvcResult = performGetAndExpect(STATS_ENDPOINT, status().isOk());
+        final var mvcResult = performGetAndExpect(status().isOk());
         assertEquals(loadJsonFile("expected/response/stats/expected_stats.json"), mvcResult.getResponse().getContentAsString(), true);
     }
 
@@ -57,7 +55,7 @@ class SpeciesStatsIntegrationTests {
             @Sql(scripts = { "classpath:scripts/clear.sql" }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void GivenNoneSpeciesAnalyzed_whenPerformGetStats_shouldBeReturnRatioZeroStatsAndStatusOk() throws Exception {
-        final var mvcResult = performGetAndExpect(STATS_ENDPOINT, status().isOk());
+        final var mvcResult = performGetAndExpect(status().isOk());
         assertEquals(loadJsonFile("expected/response/stats/expected_zero_stats.json"), mvcResult.getResponse().getContentAsString(), true);
     }
 
@@ -66,9 +64,9 @@ class SpeciesStatsIntegrationTests {
         assertThrows(StatsExecutorException.class, () -> speciesApplicationServices.viewStats(StatsIdentifier.NOT_IDENTIFIED));
     }
 
-    protected MvcResult performGetAndExpect(final String endpoint, final ResultMatcher expected) {
+    protected MvcResult performGetAndExpect(final ResultMatcher expected) {
         try {
-            return mockMvc.perform(get(endpoint)).andExpect(expected).andReturn();
+            return mockMvc.perform(get(SpeciesStatsIntegrationTests.STATS_ENDPOINT)).andExpect(expected).andReturn();
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }

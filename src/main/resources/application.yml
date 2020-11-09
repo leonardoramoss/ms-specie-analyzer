@@ -1,22 +1,19 @@
 server:
     port: 8081
-    shutdown: graceful
 spring:
+    application:
+        name: specie-analyzer
     profiles:
         active:
             - ${APP_ENV:local}
-    main:
-        banner-mode: off
-    lifecycle:
-        timeout-per-shutdown-phase: 1m
+    jpa:
+        open-in-view: true
     datasource:
         name: species
         username: ${SPECIES_DATABASE_USER}
         password: ${SPECIES_DATABASE_PASSWORD}
         url: jdbc:postgresql://${SPECIES_DATABASE_HOST}:${SPECIES_DATABASE_PORT}/${SPECIES_DATABASE_NAME}
         driver-class-name: org.postgresql.Driver
-    jpa:
-        open-in-view: true
     liquibase:
         enabled: true
         change-log: classpath:/db/changelog/db.changelog-master.xml
@@ -26,20 +23,3 @@ spring:
         user: ${SPECIES_DATABASE_USER}
         password: ${SPECIES_DATABASE_PASSWORD}
         url: jdbc:postgresql://${SPECIES_DATABASE_HOST}:${SPECIES_DATABASE_PORT}/${SPECIES_DATABASE_NAME}
-
-management:
-    health.diskspace.enabled: false
-    endpoint:
-        health:
-            probes:
-                enabled: true
-            show-details: always
-    endpoints.web.base-path: '/'
-
-info:
-    application:
-        name: specie-analyzer
-    java:
-        vendor: ${java.specification.vendor}
-        vm-name: ${java.vm.name}
-        runtime-version: ${java.runtime.version}

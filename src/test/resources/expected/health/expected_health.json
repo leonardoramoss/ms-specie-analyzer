@@ -16,6 +16,9 @@
         },
         "readinessState": {
             "status": "UP"
+        },
+        "refreshScope":{
+            "status":"UP"
         }
     },
     "groups": [

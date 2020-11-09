@@ -167,9 +167,8 @@ public class SpecieAnalysis {
 
         this.specieAs(optionalSpecie.orElse(Specie.HUMAN));
 
-        if(callback != null) {
-            callback.accept(SpecieAnalyzedEvent.of(this));
-        }
+        Optional.ofNullable(callback)
+                .ifPresent(consumer -> consumer.accept(SpecieAnalyzedEvent.of(this)));
 
         if(!this.isMatchesAsExpected()) {
             throw new SpecieAnalysisNotMatchesException(String.format("Expected: %s, Found: %s", expectedSpecie, specie));

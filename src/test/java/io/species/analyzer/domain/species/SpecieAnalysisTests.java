@@ -3,14 +3,12 @@ package io.species.analyzer.domain.species;
 import io.species.analyzer.domain.event.DomainEvent;
 import io.species.analyzer.domain.event.DomainEventNotifier;
 import io.species.analyzer.domain.event.EventNotifier;
-import io.species.analyzer.domain.event.SpecieAnalyzedEvent;
 import io.species.analyzer.domain.species.analyzer.Analyzer;
 import io.species.analyzer.infrastructure.exception.SpecieAnalysisNotMatchesException;
 import io.species.analyzer.infrastructure.exception.SpecieValidationException;
 import io.species.analyzer.infrastructure.generator.DnaSpecieUUIDGenerator;
 import io.species.analyzer.infrastructure.generator.UUIDGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Optional;

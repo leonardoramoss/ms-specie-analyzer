@@ -1,0 +1,8 @@
+spring:
+    main:
+        banner-mode: off
+    cloud:
+        config:
+            uri: ${CLOUD_CONFIG_SERVER}
+        discovery:
+            enabled: false

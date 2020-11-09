@@ -4,11 +4,11 @@ WORKDIR /cache
 COPY build.gradle .
 COPY settings.gradle .
 
-RUN gradle --no-daemon dependencies --refresh-dependencies
+RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
 COPY ./src /cache/src
 
-RUN gradle --no-daemon clean build
+RUN gradle clean build --no-daemon
 
 #
 # RELEASE image

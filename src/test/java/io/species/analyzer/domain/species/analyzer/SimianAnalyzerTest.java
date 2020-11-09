@@ -1,18 +1,12 @@
 package io.species.analyzer.domain.species.analyzer;
 
-import io.species.analyzer.domain.event.DomainEvent;
-import io.species.analyzer.domain.event.DomainEventNotifier;
-import io.species.analyzer.domain.event.EventNotifier;
 import io.species.analyzer.domain.species.Specie;
 import io.species.analyzer.domain.species.SpecieAnalysis;
 import io.species.analyzer.infrastructure.exception.SpecieAnalysisNotMatchesException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SimianAnalyzerTest {
 

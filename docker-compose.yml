@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     database:
-        container_name: database-species
+        container_name: database-specie-analyzer
         image: postgres:12
         volumes:
             - ${HOME}/Docker/postgres/species:/var/lib/postgresql/data
@@ -15,12 +15,12 @@ services:
         ports:
             - 5432:5432
         networks:
-            - species-network
+            - specie-network
 
-    specie:
-        hostname: species
-        container_name: species
-        image: species:latest
+    specie-analyzer:
+        hostname: specie-analyzer
+        container_name: specie-analyzer
+        image: specie-analyzer:latest
         command: sh -c './wait-for database:5432 -- echo "Database is ready"'
         build:
             context: ./
@@ -39,7 +39,9 @@ services:
         ports:
             - 8080:8081
         networks:
-            - species-network
+            - specie-network
+        extra_hosts:
+            -   localhost:192.168.3.1
 networks:
-    species-network:
+    specie-network:
         driver: bridge
