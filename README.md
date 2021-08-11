@@ -5,7 +5,7 @@
 ### Dependencies
 
     JDK 11
-    Maven
+    Gradle
     PostgresSQL
     Docker
     IntelliJ (Recommended)
